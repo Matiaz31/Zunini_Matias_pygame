@@ -1,0 +1,42 @@
+import pygame
+from assets import *
+from hero import Hero
+pygame.init()
+
+pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
+
+fondo = pygame.image.load(r'Facul\Parcial pygame\Renders\fondo.png').convert_alpha()
+pygame.display.set_caption("Wizzzard")
+#icono = pygame.image.load(r'Facul\Parcial pygame\Renders\icono.png')
+#pygame.display.set_icon(icono)
+clock = pygame.time.Clock()
+
+magito = Hero(0, 0, 40, 10)
+
+lista_eventos = pygame.event.get()
+
+while PLAYING:
+    magito.stay()
+    
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+
+    lista_teclas_presionadas = pygame.key.get_pressed()
+    if lista_teclas_presionadas[pygame.K_RIGHT] and not lista_teclas_presionadas[pygame.K_LEFT]:
+        magito.walk('Right')
+    if lista_teclas_presionadas[pygame.K_LEFT] and not lista_teclas_presionadas[pygame.K_RIGHT]:
+        magito.walk('Left')
+    if lista_teclas_presionadas[pygame.K_UP] and not lista_teclas_presionadas[pygame.K_DOWN]:
+        magito.walk('Down')
+    if lista_teclas_presionadas[pygame.K_DOWN] and not lista_teclas_presionadas[pygame.K_UP]:
+        magito.walk('Up')
+    if lista_teclas_presionadas[pygame.K_SPACE]:
+        magito.shoot()
+
+    pantalla.blit(fondo, (0,0))
+    delta_ms = clock.tick(FPS)
+    magito.update(delta_ms)
+    magito.draw(pantalla)
+    pygame.display.update()
