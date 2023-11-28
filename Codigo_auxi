@@ -27,3 +27,6 @@ class SurfaceManager:
 def move_coords(angle, radius, coords):
     theta = math.radians(angle)
     return coords[0] + radius * math.cos(theta), coords[1] + radius * math.sin(theta)
+
+def get_font(size):
+        return pygame.font.Font(None, size)
