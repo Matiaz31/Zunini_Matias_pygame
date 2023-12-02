@@ -1,9 +1,9 @@
 import pygame
-from assets import (ALTO_VENTANA, ANCHO_VENTANA, FPS)
-from button import Button
-from hero import Hero
-from enemies import Zambie,Fantasma
-from auxi import get_font
+from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA, FPS)
+from Codigo_Button import Button
+from Codigo_Hero import Hero
+from Codigo_Enemys import Zambie,Fantasma
+from Codigo_Auxi import get_font
 
 pygame.init()
 
