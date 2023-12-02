@@ -14,21 +14,22 @@ pygame.display.set_caption("Wizzzard")
 
 clock = pygame.time.Clock()
 
+magito = Hero(50, 8)
 
-magito = Hero(40, 10)
+sprites_enemis = pygame.sprite.Group()
+sprites_magito = pygame.sprite.GroupSingle(magito)
 
-sprites = pygame.sprite.Group()
-for i in range(10):
-    zambie = Zambie(100, 6, magito.get_rect)
-    fantom = Fantasma(100, 8)
-    sprites.add(zambie)
-    sprites.add(fantom)
-    
-sprites.add(magito)
+for _ in range(10):
+    zambie = Zambie(100,magito.get_rect)
+    fantom = Fantasma(100)
+    zambie.enemigos.append(zambie)
+    sprites_enemis.add(fantom)
+    sprites_enemis.add(zambie)
 
 lista_eventos = pygame.event.get()
 
 def play():
+    playing : True
     while True:
         pantalla.blit(fondo, (0, 0))
 
@@ -42,31 +43,33 @@ def play():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     options()
+                    
+                if event.key == pygame.K_SPACE:
+                    print("DASHED")
+                    magito.dash()
+  
+        # lista_teclas_presionadas = pygame.key.get_pressed()
+        # if lista_teclas_presionadas[pygame.K_RIGHT] and not lista_teclas_presionadas[pygame.K_LEFT]:
+        #     magito.walk('Right')
+        # if lista_teclas_presionadas[pygame.K_LEFT] and not lista_teclas_presionadas[pygame.K_RIGHT]:
+        #     magito.walk('Left')
+        # if lista_teclas_presionadas[pygame.K_UP] and not lista_teclas_presionadas[pygame.K_DOWN]:
+        #     magito.walk('Down')
+        # if lista_teclas_presionadas[pygame.K_DOWN] and not lista_teclas_presionadas[pygame.K_UP]:
+        #     magito.walk('Up')
 
 
-        lista_teclas_presionadas = pygame.key.get_pressed()
-        if lista_teclas_presionadas[pygame.K_RIGHT] and not lista_teclas_presionadas[pygame.K_LEFT]:
-            magito.walk('Right')
-        if lista_teclas_presionadas[pygame.K_LEFT] and not lista_teclas_presionadas[pygame.K_RIGHT]:
-            magito.walk('Left')
-        if lista_teclas_presionadas[pygame.K_UP] and not lista_teclas_presionadas[pygame.K_DOWN]:
-            magito.walk('Down')
-        if lista_teclas_presionadas[pygame.K_DOWN] and not lista_teclas_presionadas[pygame.K_UP]:
-            magito.walk('Up')
+        #sprites_enemis.draw(pantalla)
+        sprites_enemis.update(delta_ms, pantalla)
 
-
-        zambie.update(delta_ms)
-        zambie.draw(pantalla)
-        fantom.update(delta_ms)
-        fantom.draw(pantalla)
-        #magito.shoot(pantalla)
-        magito.update(delta_ms,pantalla)
-        magito.draw(pantalla)
+        magito.update(delta_ms, pantalla)
+        magito.shoot(pantalla)
         magito.sprite_group.draw(pantalla)
 
         pygame.display.update()
 
 def options():
+    playing : False
     print("opcions")
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
@@ -124,6 +127,9 @@ def main_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    play()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
