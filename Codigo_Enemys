@@ -1,11 +1,10 @@
 import pygame
 import random
-from hero import Hero
 from assets import (ALTO_VENTANA, ANCHO_VENTANA)
 from auxi import SurfaceManager as sf
 
 class Zambie(pygame.sprite.Sprite):
-    def __init__(self,frame_rate, speed_walk, hero_rect):
+    def __init__(self,frame_rate, hero_rect):
         super().__init__()
         self.__walk_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_walk.png', 6, 1)
         self.__walk_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_walk.png', 6, 1, flip=True)
@@ -13,71 +12,93 @@ class Zambie(pygame.sprite.Sprite):
         self.__muerte_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_death.png', 5, 1, flip=True)
         self.__atack_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_atack.png', 5, 1)
         self.__atack_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_atack.png', 5, 1, flip=True)
+
+        self.enemigos = []
+
         self.__move_x = 0
         self.__move_y = 0
-        self.__speed_walk = speed_walk
+
+        self.__speed_walk = random.randint(4,7)
         self.__frame_rate = frame_rate
         self.__actual_animation = self.__walk_r
+
         self.__enemy_move_time = 0
         self.__enemy_animation_time = 0
-        self.__initial_frame = 0
-        self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
+        self.__actual_frame = 0
+
+        self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         self.__rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
+
         self.__rect.x = random.randint(0,1080)
         self.__rect.y = random.randint(0,200)
         self.sprite_group = pygame.sprite.Group()
-        self.hero_rect = hero_rect
+
+        self.__hero_rect = hero_rect
+        self.__is_atacking = False
+
         self.__is_alive = True
-        
+        self.__spawn_momento = 0
         
 
     def __set_x_animations_preset(self, move_x, animation_list: list[pygame.surface.Surface], look_r: bool):
         self.__move_x = move_x
-        self.__actual_animation = animation_list
         self.__is_looking_right = look_r
+        if self.__actual_animation != animation_list:
+            self.__actual_frame = 0
+            self.__actual_animation = animation_list
     
     def __set_y_animations_preset(self, move_y, animation_list: list[pygame.surface.Surface], look_r: bool):
         self.__move_y = move_y
-        self.__actual_animation = animation_list
+        if self.__actual_animation != animation_list:
+            self.__actual_frame = 0
+            self.__actual_animation = animation_list
 
     def walk(self):
-        print(self.hero_rect)
-        if self.__rect.centerx < self.hero_rect.centerx:
-            look_right = True
-            self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
-        else:
-            look_right = False
-            self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
-        if self.__rect.centery < self.hero_rect.centery:
-            look_right = self.__is_looking_right
-            if look_right == True:
-                self.__set_y_animations_preset(self.__speed_walk, self.__walk_r,look_right)
+        #if self.__is_atacking == False:
+            print(self.__hero_rect)
+            if self.__rect.centerx < self.__hero_rect.centerx:
+                look_right = True
+                self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
             else:
-                self.__set_y_animations_preset(self.__speed_walk, self.__walk_l,look_right)
-        else:
-            look_right = self.__is_looking_right
-            if look_right == True:
-                self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r,look_right)
+                look_right = False
+                self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
+            if self.__rect.centery < self.__hero_rect.centery:
+                look_right = self.__is_looking_right
+                if look_right == True:
+                    self.__set_y_animations_preset(self.__speed_walk, self.__walk_r,look_right)
+                else:
+                    self.__set_y_animations_preset(self.__speed_walk, self.__walk_l,look_right)
             else:
-                self.__set_y_animations_preset(-self.__speed_walk, self.__walk_l,look_right)
+                look_right = self.__is_looking_right
+                if look_right == True:
+                    self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r,look_right)
+                else:
+                    self.__set_y_animations_preset(-self.__speed_walk, self.__walk_l,look_right)
+        #else:
+        #    self.__actual_frame = 0   
 
     def atack(self):
         look_right = self.__is_looking_right
-        rango_y = self.hero_rect.centery - self.__rect.centery
+        rango_y = self.__hero_rect.centery - self.__rect.centery
         if self.__is_looking_right:
-            rango_x = self.hero_rect.centerx - self.__rect.centerx
-
+            rango_x = self.__hero_rect.centerx - self.__rect.centerx
             if rango_x <= 40 and rango_y <= 55 and rango_y >= -50:
                 self.__set_x_animations_preset(0, self.__atack_r,look_right)
+                self.__is_atacking = True
+              
         else:
-            rango_x = self.hero_rect.centerx - self.__rect.centerx
-
-            if rango_x >= -40 and rango_y <= 55 and rango_y >= -50:
+            rango_x = self.__hero_rect.centerx - self.__rect.centerx
+            if rango_x >= -40 and rango_y <= 55 and rango_y >= -50: 
                 self.__set_x_animations_preset(0, self.__atack_l,look_right)
+                self.__is_atacking = True
+             
+
+        self.__is_atacking = False
+
 
     def draw(self, screen: pygame.surface.Surface):
-        self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
+        self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         screen.blit(self.__actual_img_animation, self.__rect)
 
     def __set_borders_limits_x(self):
@@ -105,50 +126,62 @@ class Zambie(pygame.sprite.Sprite):
             self.__rect.y += self.__set_borders_limits_y()
     
 
+    # def do_animation(self, delta_ms):
+    #     self.__enemy_animation_time += delta_ms
+    #     if self.__enemy_animation_time >= self.__frame_rate:
+    #         self.__enemy_animation_time = 0
+    #         if self.__actual_frame < len(self.__actual_animation) - 1:
+    #             self.__actual_frame += 1
+    #         else:
+    #             if self.__is_alive:
+    #                 self.__actual_frame = 0
+
     def do_animation(self, delta_ms):
-        self.__enemy_animation_time += delta_ms
-        if self.__enemy_animation_time >= self.__frame_rate:
-            self.__enemy_animation_time = 0
-            if self.__initial_frame < len(self.__actual_animation) - 1:
-                self.__initial_frame += 1
-            else:
-                if self.__is_alive:
-                    self.__initial_frame = 0
+            self.__enemy_animation_time += delta_ms
+            if self.__enemy_animation_time >= self.__frame_rate:
+                self.__enemy_animation_time = 0
+                if self.__actual_frame < len(self.__actual_animation) - 1:
+                    self.__actual_frame += 1
+                else:
+                    self.__actual_frame = 0
     
-    def update(self, delta_ms):
+    def update(self, delta_ms, screen: pygame.surface.Surface):
         self.walk()
         self.atack()
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
         self.sprite_group.update()
+        self.draw(screen)
 
     def draw(self, screen: pygame.surface.Surface):
-        self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
+        self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         screen.blit(self.__actual_img_animation, self.__rect)
 
-
-
+    def generador(self):
+        momento = pygame.time.get_ticks()/1000
+        if momento - self.__spawn_momento >= 2:
+            enemigo = self(self.__frame_rate, self.__hero_rect)
+            pygame.sprite.Group.add(enemigo)
+            self.__spawn_momento = pygame.time.get_ticks()/1000
 
 
 
 class Fantasma(pygame.sprite.Sprite):
-    def __init__(self,frame_rate, speed_walk):
+    def __init__(self,frame_rate):
         super().__init__()
         self.__walk_l = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_walk.png', 12, 1)
         self.__walk_r = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_walk.png', 12, 1, flip=True)
-        self.__giro_r = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_giro.png', 6, 1)
-        self.__giro_l = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_giro.png', 6, 1, flip=True)
         self.__muerte_r = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_muerte.png', 5, 1)
         self.__muerte_l = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_muerte.png', 5, 1, flip=True)
         self.__move_x = 0
         self.__move_y = 0
-        self.__speed_walk = speed_walk
+        self.__speed_walk = random.randint(7,10)
         self.__frame_rate = frame_rate
         self.__actual_animation = self.__walk_r
         self.__enemy_move_time = 0
         self.__enemy_animation_time = 0
-        self.__initial_frame = 0
-        self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
+        self.__actual_frame = 0
+        self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         self.__rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
         self.__rect.x = random.randint(0,200)
@@ -180,10 +213,10 @@ class Fantasma(pygame.sprite.Sprite):
         self.__enemy_animation_time += delta_ms
         if self.__enemy_animation_time >= self.__frame_rate:
             self.__enemy_animation_time = 0
-            if self.__initial_frame < len(self.__actual_animation) - 1:
-                self.__initial_frame += 1
+            if self.__actual_frame < len(self.__actual_animation) - 1:
+                self.__actual_frame += 1
             else:
-                self.__initial_frame = 0
+                self.__actual_frame = 0
 
     def do_movement(self, delta_ms):
         self.__enemy_move_time += delta_ms
@@ -203,8 +236,6 @@ class Fantasma(pygame.sprite.Sprite):
 
     def walk(self):
         direccion = self.__is_looking_right
-        print(direccion)
-        print(self.__rect.x)
         match direccion:
             case True:
                 self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, direccion)
@@ -217,11 +248,12 @@ class Fantasma(pygame.sprite.Sprite):
 
 
     def draw(self, screen: pygame.surface.Surface):
-        self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
+        self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         screen.blit(self.__actual_img_animation, self.__rect)
 
-    def update(self, delta_ms):
+    def update(self, delta_ms, screen: pygame.surface.Surface):
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
         self.sprite_group.update()
         self.walk()
+        self.draw(screen)
