@@ -1,17 +1,17 @@
 import pygame
 import random
-from assets import (ALTO_VENTANA, ANCHO_VENTANA)
-from auxi import SurfaceManager as sf
+from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
+from Codigo_Auxi import SurfaceManager as sf
 
 class Zambie(pygame.sprite.Sprite):
     def __init__(self,frame_rate, hero_rect):
         super().__init__()
-        self.__walk_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_walk.png', 6, 1)
-        self.__walk_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_walk.png', 6, 1, flip=True)
-        self.__muerte_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_death.png', 5, 1)
-        self.__muerte_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_death.png', 5, 1, flip=True)
-        self.__atack_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_atack.png', 5, 1)
-        self.__atack_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\zambie_atack.png', 5, 1, flip=True)
+        self.__walk_r = sf.get_surface_from_spritesheet("Renders\zambie_walk.png", 6, 1)
+        self.__walk_l = sf.get_surface_from_spritesheet("Renders\zambie_walk.png", 6, 1, flip=True)
+        self.__atack_r = sf.get_surface_from_spritesheet("Renders\zambie_atack.png", 5, 1)
+        self.__atack_l = sf.get_surface_from_spritesheet("Renders\zambie_atack.png", 5, 1, flip=True)
+        self.__muerte_r = sf.get_surface_from_spritesheet("Renders\zambie_death.png", 5, 1)
+        self.__muerte_l = sf.get_surface_from_spritesheet("Renders\zambie_death.png", 5, 1, flip=True)
 
         self.enemigos = []
 
@@ -169,10 +169,10 @@ class Zambie(pygame.sprite.Sprite):
 class Fantasma(pygame.sprite.Sprite):
     def __init__(self,frame_rate):
         super().__init__()
-        self.__walk_l = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_walk.png', 12, 1)
-        self.__walk_r = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_walk.png', 12, 1, flip=True)
-        self.__muerte_r = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_muerte.png', 5, 1)
-        self.__muerte_l = sf.get_surface_from_spritesheet(r'Facul\Parcial pygame\Renders\fantasma_muerte.png', 5, 1, flip=True)
+        self.__walk_l = sf.get_surface_from_spritesheet(r"Renders\fantasma_walk.png", 12, 1)
+        self.__walk_r = sf.get_surface_from_spritesheet(r"Renders\fantasma_walk.png", 12, 1, flip=True)
+        self.__muerte_r = sf.get_surface_from_spritesheet(r"Renders\fantasma_muerte.png", 5, 1)
+        self.__muerte_l = sf.get_surface_from_spritesheet(r"Renders\fantasma_muerte.png", 5, 1, flip=True)
         self.__move_x = 0
         self.__move_y = 0
         self.__speed_walk = random.randint(7,10)

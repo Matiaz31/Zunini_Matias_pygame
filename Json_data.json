@@ -13,8 +13,8 @@
             },
             "fantom":{
                 "sprites":{
-                    "walk": "Facul/Parcial pygame/Renders/fantasma_walk.png",
-                    "muerte": "Facul/Parcial pygame/Renders/fantasma_muerte.png"
+                    "walk": "Renders\fantasma_walk.png",
+                    "muerte": "Renders\fantasma_muerte.png"
                 } ,
                 "vida": 100,
                 "velocidad": 1
@@ -27,7 +27,8 @@
                 } ,
                 "vida": 50,
                 "velocidad": 1
-            }
+            },
+            "cantidad": 10
         }
     },
     "dificultad_2":
@@ -44,8 +45,8 @@
             },
             "fantom":{
                 "sprites":{
-                    "walk": "Facul/Parcial pygame/Renders/fantasma_walk.png",
-                    "muerte": "Facul/Parcial pygame/Renders/fantasma_muerte.png"
+                    "walk": "Renders\fantasma_walk.png",
+                    "muerte": "Renders\fantasma_muerte.png"
                 } ,
                 "vida": 150,
                 "velocidad": 1
@@ -58,7 +59,8 @@
                 } ,
                 "vida": 100,
                 "velocidad": 2
-            }
+            },
+            "cantidad": 13
         }
     },
     "dificultad_3":
@@ -66,17 +68,17 @@
         "enemigos":{
             "zombie":{
                 "sprites":{
-                    "walk": "Facul/Parcial pygame/Renders/zambie_walk.png",
-                    "atack": "Facul/Parcial pygame/Renders/zambie_atack.png",
-                    "muerte": "Facul/Parcial pygame/Renders/zambie_death.png"
+                    "walk": "Renders\zambie_walk.png",
+                    "atack": "Renders\zambie_atack.png",
+                    "muerte": "Renders\zambie_death.png"
                 } ,
                 "vida": 300,
                 "velocidad": 2
             },
             "fantom":{
                 "sprites":{
-                    "walk": "Facul/Parcial pygame/Renders/fantasma_walk.png",
-                    "muerte": "Facul/Parcial pygame/Renders/fantasma_muerte.png"
+                    "walk": "Renders\fantasma_walk.png",
+                    "muerte": "Renders\fantasma_muerte.png"
                 } ,
                 "vida": 200,
                 "velocidad": 2
@@ -89,15 +91,17 @@
                 } ,
                 "vida": 150,
                 "velocidad": 3
-            }
+            },
+            "cantidad": 16
         }
     },
     "estadisticas_hero":
     {
         "sprites":{
-            "idle": "",
-            "walk": "Facul/Parcial pygame/Renders/hero_walk.png",
-            "muerte": ""
+            "idle": "Renders\hero_iddle.png",
+            "walk": "Renders\hero_walk.png",
+            "muerte": "",
+            "bala": "Renders/energi_ball.png"
         } ,
         "vida": 300,
         "velocidad": 10,

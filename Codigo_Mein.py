@@ -9,7 +9,7 @@ pygame.init()
 
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 
-fondo = pygame.image.load(r'Facul\Parcial pygame\Renders\fondo.png').convert_alpha()
+fondo = pygame.image.load(r'Renders\fondo.png').convert_alpha()
 pygame.display.set_caption("Wizzzard")
 
 clock = pygame.time.Clock()
@@ -111,11 +111,11 @@ def main_menu():
         MENU_TEXT = get_font(75).render("MAIN MENU", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(ANCHO_VENTANA/2, 100))
 
-        PLAY_BUTTON = Button(image=pygame.image.load("Facul\Parcial pygame\Renders\Play Rect.png"), pos=(ANCHO_VENTANA/2, 250), 
+        PLAY_BUTTON = Button(image=pygame.image.load("Renders\Play Rect.png"), pos=(ANCHO_VENTANA/2, 250), 
                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        OPTIONS_BUTTON = Button(image=pygame.image.load("Facul\Parcial pygame\Renders\Options Rect.png"), pos=(ANCHO_VENTANA/2, 400), 
+        OPTIONS_BUTTON = Button(image=pygame.image.load("Renders\Options Rect.png"), pos=(ANCHO_VENTANA/2, 400), 
                             text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("Facul\Parcial pygame\Renders\Quit Rect.png"), pos=(ANCHO_VENTANA/2, 550), 
+        QUIT_BUTTON = Button(image=pygame.image.load("Renders\Quit Rect.png"), pos=(ANCHO_VENTANA/2, 550), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
         pantalla.blit(MENU_TEXT, MENU_RECT)

@@ -1,16 +1,16 @@
 import pygame
-from assets import (ALTO_VENTANA, ANCHO_VENTANA)
-from bullet import Bullet
-from auxi import SurfaceManager as sf
+from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
+from Codigo_Bullet import Bullet
+from Codigo_Auxi import SurfaceManager as sf
 import random
 
 class Hero(pygame.sprite.Sprite):
     def __init__(self,frame_rate, speed_walk):
         super().__init__()
-        self.__iddle_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\Hero.png', 6, 1, flip=True)
-        self.__iddle_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\Hero.png', 6, 1)
-        self.__walk_r = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\Hero.png', 6, 1, flip=True)
-        self.__walk_l = sf.get_surface_from_spritesheet('Facul\Parcial pygame\Renders\Hero.png', 6, 1)
+        self.__iddle_l = sf.get_surface_from_spritesheet("Renders\hero_iddle.png", 3, 1, flip=True)
+        self.__iddle_r = sf.get_surface_from_spritesheet("Renders\hero_iddle.png", 3, 1)
+        self.__walk_l = sf.get_surface_from_spritesheet("Renders\hero_walk.png", 6, 1, flip=True)
+        self.__walk_r = sf.get_surface_from_spritesheet("Renders\hero_walk.png", 6, 1)
 
         self.__move_x = 0
         self.__move_y = 0
@@ -62,25 +62,25 @@ class Hero(pygame.sprite.Sprite):
         self.__move_y = move_y
         self.__actual_animation = animation_list
     
-    def walk(self, direction: str = ''):
+    def walk(self, direction: str = ""):
         self.__dash_direccion = direction
         match direction:
-            case 'Right':
+            case "Right":
                 look_right = True
                 self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
 
-            case 'Left':
+            case "Left":
                 look_right = False
                 self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
 
-            case 'Up':
+            case "Up":
                 look_right = self.__is_looking_right
                 if look_right:
                     self.__set_y_animations_preset(self.__speed_walk, self.__walk_r)
                 else:
                     self.__set_y_animations_preset(self.__speed_walk, self.__walk_l)
 
-            case 'Down':
+            case "Down":
                 look_right = self.__is_looking_right
                 if look_right:
                     self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r)
@@ -123,13 +123,13 @@ class Hero(pygame.sprite.Sprite):
     def teclas(self):
         lista_teclas_presionadas = pygame.key.get_pressed()
         if lista_teclas_presionadas[pygame.K_RIGHT] and not lista_teclas_presionadas[pygame.K_LEFT]:
-            self.walk('Right')
+            self.walk("Right")
         if lista_teclas_presionadas[pygame.K_LEFT] and not lista_teclas_presionadas[pygame.K_RIGHT]:
-            self.walk('Left')
+            self.walk("Left")
         if lista_teclas_presionadas[pygame.K_UP] and not lista_teclas_presionadas[pygame.K_DOWN]:
-            self.walk('Down')
+            self.walk("Down")
         if lista_teclas_presionadas[pygame.K_DOWN] and not lista_teclas_presionadas[pygame.K_UP]:
-            self.walk('Up')
+            self.walk("Up")
 
     def do_animation(self, delta_ms):
         self.__player_animation_time += delta_ms

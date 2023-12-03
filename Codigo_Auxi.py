@@ -1,5 +1,8 @@
 import pygame
 import math
+import json
+
+
 class SurfaceManager:
 
     @staticmethod
@@ -30,3 +33,7 @@ def move_coords(angle, radius, coords):
 
 def get_font(size):
         return pygame.font.Font(None, size)
+
+def open_configs() -> dict:
+    with open("Json_data.json", "r", encoding="utf-8") as config:
+        return json.load(config)
