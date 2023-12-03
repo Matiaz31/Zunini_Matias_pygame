@@ -57,7 +57,6 @@ class Zambie(pygame.sprite.Sprite):
             self.__actual_animation = animation_list
 
     def walk(self):
-        print(self.__hero_rect)
         if self.rect.centerx < self.__hero_rect.centerx:
             look_right = True
             self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
