@@ -3,7 +3,8 @@ from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA, FPS)
 from Codigo_Button import Button
 from Codigo_Hero import Hero
 from Codigo_Enemys import Zambie,Fantasma
-from Codigo_Auxi import get_font
+from Codigo_Auxi import get_font,open_configs
+
 
 pygame.init()
 
@@ -14,7 +15,7 @@ pygame.display.set_caption("Wizzzard")
 
 clock = pygame.time.Clock()
 
-magito = Hero(50, 8)
+magito = Hero(50, 8, open_configs())
 
 sprites_enemis = pygame.sprite.Group()
 sprites_magito = pygame.sprite.GroupSingle(magito)
@@ -29,13 +30,9 @@ for _ in range(10):
 lista_eventos = pygame.event.get()
 
 def play():
-    playing : True
     while True:
         pantalla.blit(fondo, (0, 0))
-
         delta_ms = clock.tick(FPS)
-        magito.stay()
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -48,28 +45,14 @@ def play():
                     print("DASHED")
                     magito.dash()
   
-        # lista_teclas_presionadas = pygame.key.get_pressed()
-        # if lista_teclas_presionadas[pygame.K_RIGHT] and not lista_teclas_presionadas[pygame.K_LEFT]:
-        #     magito.walk('Right')
-        # if lista_teclas_presionadas[pygame.K_LEFT] and not lista_teclas_presionadas[pygame.K_RIGHT]:
-        #     magito.walk('Left')
-        # if lista_teclas_presionadas[pygame.K_UP] and not lista_teclas_presionadas[pygame.K_DOWN]:
-        #     magito.walk('Down')
-        # if lista_teclas_presionadas[pygame.K_DOWN] and not lista_teclas_presionadas[pygame.K_UP]:
-        #     magito.walk('Up')
-
-
-        #sprites_enemis.draw(pantalla)
         sprites_enemis.update(delta_ms, pantalla)
 
         magito.update(delta_ms, pantalla)
-        magito.shoot(pantalla)
         magito.sprite_group.draw(pantalla)
 
         pygame.display.update()
 
 def options():
-    playing : False
     print("opcions")
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()

@@ -22,7 +22,8 @@
             "murciegalo":{
                 "sprites":{
                     "walk": "Renders/bat_walk.png",
-                    "muerte": ""
+                    "muerte": "",
+                    "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 50,
                 "velocidad": 1
@@ -53,7 +54,8 @@
             "murciegalo":{
                 "sprites":{
                     "walk": "Renders/bat_walk.png",
-                    "muerte": ""
+                    "muerte": "",
+                    "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 100,
                 "velocidad": 2
@@ -84,7 +86,8 @@
             "murciegalo":{
                 "sprites":{
                     "walk": "Renders/bat_walk.png",
-                    "muerte": ""
+                    "muerte": "",
+                    "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 150,
                 "velocidad": 3
@@ -102,6 +105,11 @@
         } ,
         "vida": 300,
         "velocidad": 10,
-        "cooldawn": 6
+        "cooldawn": 3
+    },
+    "config_mundo": 
+    {
+        "fondo":"Renders/fondo.png"
     }
 }
+

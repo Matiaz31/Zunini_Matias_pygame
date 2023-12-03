@@ -2,25 +2,31 @@ import pygame
 from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
 from Codigo_Bullet import Bullet
 from Codigo_Auxi import SurfaceManager as sf
-import random
 
 class Hero(pygame.sprite.Sprite):
-    def __init__(self,frame_rate, speed_walk):
+    def __init__(self,frame_rate, speed_walk, diccionario):
         super().__init__()
-        self.__iddle_l = sf.get_surface_from_spritesheet("Renders\hero_iddle.png", 3, 1, flip=True)
-        self.__iddle_r = sf.get_surface_from_spritesheet("Renders\hero_iddle.png", 3, 1)
-        self.__walk_l = sf.get_surface_from_spritesheet("Renders\hero_walk.png", 6, 1, flip=True)
-        self.__walk_r = sf.get_surface_from_spritesheet("Renders\hero_walk.png", 6, 1)
+        self.__player_config = diccionario.get("estadisticas_hero")
+        self.__sprites_config = self.__player_config.get("sprites")
+
+        self.__iddle_l = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1, flip=True)
+        self.__iddle_r = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1)
+        self.__walk_l = sf.get_surface_from_spritesheet(self.__sprites_config["walk"], 6, 1, flip=True)
+        self.__walk_r = sf.get_surface_from_spritesheet(self.__sprites_config["walk"], 6, 1)
+        self.__is_stay = True
+
+        self.__bullet_img = self.__sprites_config["bala"]
+        self.__puntaje = 0
 
         self.__move_x = 0
         self.__move_y = 0
-        self.__speed_walk = speed_walk
+        self.__speed_walk = self.__player_config["velocidad"]
         self.__frame_rate = frame_rate
+        self.__vida = self.__player_config["vida"]
 
         self.__player_move_time = 0
         self.__player_animation_time = 0
         self.__initial_frame = 0
-
         self.__actual_animation = self.__iddle_r
         self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
         self.__rect = self.__actual_img_animation.get_rect()
@@ -30,7 +36,7 @@ class Hero(pygame.sprite.Sprite):
         self.__rect.y = ALTO_VENTANA/2
 
         self.__fire_moment = 1
-        self.__fire_cooldawn = 3
+        self.__fire_cooldawn = self.__player_config["cooldawn"]
         self.__fire = False
 
         self.__dash_moment = 1
@@ -55,8 +61,10 @@ class Hero(pygame.sprite.Sprite):
     
     def __set_x_animations_preset(self, move_x, animation_list: list[pygame.surface.Surface], look_r: bool):
         self.__move_x = move_x
-        self.__actual_animation = animation_list
         self.__is_looking_right = look_r
+        if self.__actual_animation != animation_list:
+            self.__actual_frame = 0
+            self.__actual_animation = animation_list
         
     def __set_y_animations_preset(self, move_y, animation_list: list[pygame.surface.Surface]):
         self.__move_y = move_y
@@ -64,6 +72,7 @@ class Hero(pygame.sprite.Sprite):
     
     def walk(self, direction: str = ""):
         self.__dash_direccion = direction
+        self.__is_stay = False
         match direction:
             case "Right":
                 look_right = True
@@ -86,14 +95,16 @@ class Hero(pygame.sprite.Sprite):
                     self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r)
                 else:
                     self.__set_y_animations_preset(-self.__speed_walk, self.__walk_l)
+        self.__is_stay = True
 
     
     def stay(self):
-        if self.__actual_animation != self.__iddle_l and self.__actual_animation != self.__iddle_r:
-            self.__actual_animation = self.__iddle_r if self.__is_looking_right else self.__iddle_l
-            self.__initial_frame = 0
-            self.__move_x = 0
-            self.__move_y = 0
+        if self.__is_stay:
+            if self.__actual_animation != self.__iddle_l and self.__actual_animation != self.__iddle_r:
+                self.__actual_animation = self.__iddle_r if self.__is_looking_right else self.__iddle_l
+                self.__initial_frame = 0
+                self.__move_x = 0
+                self.__move_y = 0
     
     
     def __set_borders_limits_x(self):
@@ -141,7 +152,9 @@ class Hero(pygame.sprite.Sprite):
                 self.__initial_frame = 0
     
     def update(self, delta_ms, screen: pygame.surface.Surface):
+        self.stay()
         self.teclas()
+        self.shoot(screen)
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
         self.sprite_group.update() 
@@ -169,13 +182,13 @@ class Hero(pygame.sprite.Sprite):
 
     def shoot_create(self, bala: int):
         if bala == 1:
-            return Bullet(self.__rect.centerx,self.__rect.centery, "Right-Up")
+            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Right-Up")
         elif bala == 2:
-            return Bullet(self.__rect.centerx,self.__rect.centery, "Left-Up")
+            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Left-Up")
         elif bala == 3:
-            return Bullet(self.__rect.centerx,self.__rect.centery, "Right-Down")
+            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Right-Down")
         elif bala == 4:
-            return Bullet(self.__rect.centerx,self.__rect.centery, "Left-Down")   
+            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Left-Down")   
     
     def dash(self):
         if self.dash_recharge():

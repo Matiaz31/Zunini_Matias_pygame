@@ -55,28 +55,26 @@ class Zambie(pygame.sprite.Sprite):
             self.__actual_animation = animation_list
 
     def walk(self):
-        #if self.__is_atacking == False:
-            print(self.__hero_rect)
-            if self.__rect.centerx < self.__hero_rect.centerx:
-                look_right = True
-                self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
+        print(self.__hero_rect)
+        if self.__rect.centerx < self.__hero_rect.centerx:
+            look_right = True
+            self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
+        else:
+            look_right = False
+            self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
+        if self.__rect.centery < self.__hero_rect.centery:
+            look_right = self.__is_looking_right
+            if look_right == True:
+                self.__set_y_animations_preset(self.__speed_walk, self.__walk_r,look_right)
             else:
-                look_right = False
-                self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
-            if self.__rect.centery < self.__hero_rect.centery:
-                look_right = self.__is_looking_right
-                if look_right == True:
-                    self.__set_y_animations_preset(self.__speed_walk, self.__walk_r,look_right)
-                else:
-                    self.__set_y_animations_preset(self.__speed_walk, self.__walk_l,look_right)
+                self.__set_y_animations_preset(self.__speed_walk, self.__walk_l,look_right)
+        else:
+            look_right = self.__is_looking_right
+            if look_right == True:
+                self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r,look_right)
             else:
-                look_right = self.__is_looking_right
-                if look_right == True:
-                    self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r,look_right)
-                else:
-                    self.__set_y_animations_preset(-self.__speed_walk, self.__walk_l,look_right)
-        #else:
-        #    self.__actual_frame = 0   
+                self.__set_y_animations_preset(-self.__speed_walk, self.__walk_l,look_right)
+
 
     def atack(self):
         look_right = self.__is_looking_right
@@ -137,13 +135,13 @@ class Zambie(pygame.sprite.Sprite):
     #                 self.__actual_frame = 0
 
     def do_animation(self, delta_ms):
-            self.__enemy_animation_time += delta_ms
-            if self.__enemy_animation_time >= self.__frame_rate:
-                self.__enemy_animation_time = 0
-                if self.__actual_frame < len(self.__actual_animation) - 1:
-                    self.__actual_frame += 1
-                else:
-                    self.__actual_frame = 0
+        self.__enemy_animation_time += delta_ms
+        if self.__enemy_animation_time >= self.__frame_rate:
+            self.__enemy_animation_time = 0
+            if self.__actual_frame < len(self.__actual_animation) - 1:
+                self.__actual_frame += 1
+            else:
+                self.__actual_frame = 0
     
     def update(self, delta_ms, screen: pygame.surface.Surface):
         self.walk()
