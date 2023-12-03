@@ -38,3 +38,16 @@ class Stage:
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
         self.player_sprite.draw(self.__main_screen)
+
+        for bullet in self.player_sprite.get_bullets:
+            cantidad_antes = len(self.enemies)
+            pygame.sprite.spritecollide(bullet, self.enemies, True)
+            cantidad_despues = len(self.enemies)
+            if cantidad_antes > cantidad_despues:
+                bullet.kill()
+                cantidad_vencido = cantidad_antes - cantidad_despues
+                self.player_sprite.puntaje += cantidad_vencido * 100
+                print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
+            if len(self.enemies) == 0 and not self.__player_win:
+                self.__player_win = True
+                print(f'Ganaste la partida con: {self.player_sprite.puntaje} Puntos!')

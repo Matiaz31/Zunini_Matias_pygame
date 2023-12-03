@@ -16,7 +16,7 @@ class Hero(pygame.sprite.Sprite):
         self.__is_stay = True
 
         self.__bullet_img = self.__sprites_config["bala"]
-        self.__puntaje = 0
+        self.puntaje = 0
 
         self.__move_x = 0
         self.__move_y = 0
@@ -45,19 +45,15 @@ class Hero(pygame.sprite.Sprite):
         self.__dash_power = 15
         self.__dash_direccion = "Right"
 
-        self.sprite_group = pygame.sprite.Group()
+        self.__sprite_bullet_group = pygame.sprite.Group()
         
     @property
     def get_rect(self):
         return self.__rect
     
     @property
-    def get_x(self):
-        return self.__rect.x
-    
-    @property
-    def get_y(self):
-        return self.__rect.y
+    def get_bullets(self) -> list[Bullet]:
+        return self.__sprite_bullet_group
     
     def __set_x_animations_preset(self, move_x, animation_list: list[pygame.surface.Surface], look_r: bool):
         self.__move_x = move_x
@@ -157,8 +153,8 @@ class Hero(pygame.sprite.Sprite):
         self.shoot(screen)
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
-        self.sprite_group.update()
-        self.sprite_group.draw(screen)
+        self.__sprite_bullet_group.update()
+        self.__sprite_bullet_group.draw(screen)
         self.draw(screen)
     
     def draw(self, screen: pygame.surface.Surface):
@@ -169,7 +165,7 @@ class Hero(pygame.sprite.Sprite):
         if self.shoot_recharge():
             self.__fire_moment = pygame.time.get_ticks()/1000
             for i in range(1,5):
-                self.sprite_group.add(self.shoot_create(i))
+                self.__sprite_bullet_group.add(self.shoot_create(i))
             self.fire = False
 
     def shoot_recharge(self):

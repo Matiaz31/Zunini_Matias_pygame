@@ -29,11 +29,11 @@ class Zambie(pygame.sprite.Sprite):
         self.__actual_frame = 0
 
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
-        self.__rect = self.__actual_img_animation.get_rect()
+        self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
 
-        self.__rect.x = random.randint(0,1080)
-        self.__rect.y = random.randint(0,200)
+        self.rect.x = random.randint(0,1080)
+        self.rect.y = random.randint(0,200)
         self.sprite_group = pygame.sprite.Group()
 
         self.__hero_rect = hero_rect
@@ -58,13 +58,13 @@ class Zambie(pygame.sprite.Sprite):
 
     def walk(self):
         print(self.__hero_rect)
-        if self.__rect.centerx < self.__hero_rect.centerx:
+        if self.rect.centerx < self.__hero_rect.centerx:
             look_right = True
             self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
         else:
             look_right = False
             self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
-        if self.__rect.centery < self.__hero_rect.centery:
+        if self.rect.centery < self.__hero_rect.centery:
             look_right = self.__is_looking_right
             if look_right == True:
                 self.__set_y_animations_preset(self.__speed_walk, self.__walk_r,look_right)
@@ -80,15 +80,15 @@ class Zambie(pygame.sprite.Sprite):
 
     def atack(self):
         look_right = self.__is_looking_right
-        rango_y = self.__hero_rect.centery - self.__rect.centery
+        rango_y = self.__hero_rect.centery - self.rect.centery
         if self.__is_looking_right:
-            rango_x = self.__hero_rect.centerx - self.__rect.centerx
+            rango_x = self.__hero_rect.centerx - self.rect.centerx
             if rango_x <= 40 and rango_y <= 55 and rango_y >= -50:
                 self.__set_x_animations_preset(0, self.__atack_r,look_right)
                 self.__is_atacking = True
               
         else:
-            rango_x = self.__hero_rect.centerx - self.__rect.centerx
+            rango_x = self.__hero_rect.centerx - self.rect.centerx
             if rango_x >= -40 and rango_y <= 55 and rango_y >= -50: 
                 self.__set_x_animations_preset(0, self.__atack_l,look_right)
                 self.__is_atacking = True
@@ -99,22 +99,22 @@ class Zambie(pygame.sprite.Sprite):
 
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
-        screen.blit(self.__actual_img_animation, self.__rect)
+        screen.blit(self.__actual_img_animation, self.rect)
 
     def __set_borders_limits_x(self):
         pixels_move = 0
         if self.__move_x > 0:
-            pixels_move = self.__move_x if self.__rect.x < ANCHO_VENTANA - self.__actual_img_animation.get_width() else 0
+            pixels_move = self.__move_x if self.rect.x < ANCHO_VENTANA - self.__actual_img_animation.get_width() else 0
         elif self.__move_x < 0:
-            pixels_move = self.__move_x if self.__rect.x > 0 else 0
+            pixels_move = self.__move_x if self.rect.x > 0 else 0
         return pixels_move
     
     def __set_borders_limits_y(self):
         pixels_move = 0
         if self.__move_y > 0:
-            pixels_move = self.__move_y if self.__rect.y < ALTO_VENTANA - self.__actual_img_animation.get_height() else 0
+            pixels_move = self.__move_y if self.rect.y < ALTO_VENTANA - self.__actual_img_animation.get_height() else 0
         elif self.__move_y < 0:
-            pixels_move = self.__move_y if self.__rect.y > 0 else 0
+            pixels_move = self.__move_y if self.rect.y > 0 else 0
         return pixels_move
     
 
@@ -122,8 +122,8 @@ class Zambie(pygame.sprite.Sprite):
         self.__enemy_move_time += delta_ms
         if self.__enemy_move_time >= self.__frame_rate:
             self.__enemy_move_time = 0
-            self.__rect.x += self.__set_borders_limits_x()
-            self.__rect.y += self.__set_borders_limits_y()
+            self.rect.x += self.__set_borders_limits_x()
+            self.rect.y += self.__set_borders_limits_y()
 
     def do_animation(self, delta_ms):
         self.__enemy_animation_time += delta_ms
@@ -144,7 +144,7 @@ class Zambie(pygame.sprite.Sprite):
 
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
-        screen.blit(self.__actual_img_animation, self.__rect)
+        screen.blit(self.__actual_img_animation, self.rect)
 
     def generador(self):
         momento = pygame.time.get_ticks()/1000
@@ -173,31 +173,31 @@ class Fantasma(pygame.sprite.Sprite):
         self.__enemy_animation_time = 0
         self.__actual_frame = 0
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
-        self.__rect = self.__actual_img_animation.get_rect()
+        self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
-        self.__rect.x = random.randint(0,200)
-        self.__rect.y = random.randint(0,600)
+        self.rect.x = random.randint(0,200)
+        self.rect.y = random.randint(0,600)
         self.sprite_group = pygame.sprite.Group()
 
 
     def __set_borders_limits_x(self):
         pixels_move = 0
         if self.__move_x > 0:
-            if self.__rect.x < ANCHO_VENTANA - self.__actual_img_animation.get_width():
+            if self.rect.x < ANCHO_VENTANA - self.__actual_img_animation.get_width():
                 pixels_move = self.__move_x
             else:
 
                 0
         elif self.__move_x < 0:
-            pixels_move = self.__move_x if self.__rect.x > 0 else 0
+            pixels_move = self.__move_x if self.rect.x > 0 else 0
         return pixels_move
     
     def __set_borders_limits_y(self):
         pixels_move = 0
         if self.__move_y > 0:
-            pixels_move = self.__move_y if self.__rect.y < ALTO_VENTANA - self.__actual_img_animation.get_height() else 0
+            pixels_move = self.__move_y if self.rect.y < ALTO_VENTANA - self.__actual_img_animation.get_height() else 0
         elif self.__move_y < 0:
-            pixels_move = self.__move_y if self.__rect.y > 0 else 0
+            pixels_move = self.__move_y if self.rect.y > 0 else 0
         return pixels_move
     
     def do_animation(self, delta_ms):
@@ -213,8 +213,8 @@ class Fantasma(pygame.sprite.Sprite):
         self.__enemy_move_time += delta_ms
         if self.__enemy_move_time >= self.__frame_rate:
             self.__enemy_move_time = 0
-            self.__rect.x += self.__set_borders_limits_x()
-            self.__rect.y += self.__set_borders_limits_y()
+            self.rect.x += self.__set_borders_limits_x()
+            self.rect.y += self.__set_borders_limits_y()
 
     def __set_x_animations_preset(self, move_x, animation_list: list[pygame.surface.Surface], look_r: bool):
         self.__move_x = move_x
@@ -230,17 +230,17 @@ class Fantasma(pygame.sprite.Sprite):
         match direccion:
             case True:
                 self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, direccion)
-                if self.__rect.centerx >= ANCHO_VENTANA - 50:
+                if self.rect.centerx >= ANCHO_VENTANA - 50:
                     self.__is_looking_right = False
             case _:
                     self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, direccion)
-                    if self.__rect.centerx <= 50:
+                    if self.rect.centerx <= 50:
                         self.__is_looking_right = True
 
 
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
-        screen.blit(self.__actual_img_animation, self.__rect)
+        screen.blit(self.__actual_img_animation, self.rect)
 
     def update(self, delta_ms, screen: pygame.surface.Surface):
         self.do_movement(delta_ms)
