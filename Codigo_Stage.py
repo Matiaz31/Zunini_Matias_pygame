@@ -46,7 +46,7 @@ class Stage:
             if cantidad_antes > cantidad_despues:
                 bullet.kill()
                 cantidad_vencido = cantidad_antes - cantidad_despues
-                self.player_sprite.puntaje += cantidad_vencido * 100
+                self.player_sprite.puntaje += cantidad_vencido * 60
                 print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
             if len(self.enemies) == 0 and not self.__player_win:
                 self.__player_win = True
