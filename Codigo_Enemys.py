@@ -6,12 +6,14 @@ from Codigo_Auxi import SurfaceManager as sf
 class Zambie(pygame.sprite.Sprite):
     def __init__(self,frame_rate, hero_rect, diccionario):
         super().__init__()
-        self.__walk_r = sf.get_surface_from_spritesheet("Renders\zambie_walk.png", 6, 1)
-        self.__walk_l = sf.get_surface_from_spritesheet("Renders\zambie_walk.png", 6, 1, flip=True)
-        self.__atack_r = sf.get_surface_from_spritesheet("Renders\zambie_atack.png", 5, 1)
-        self.__atack_l = sf.get_surface_from_spritesheet("Renders\zambie_atack.png", 5, 1, flip=True)
-        self.__muerte_r = sf.get_surface_from_spritesheet("Renders\zambie_death.png", 5, 1)
-        self.__muerte_l = sf.get_surface_from_spritesheet("Renders\zambie_death.png", 5, 1, flip=True)
+        self.__config = diccionario.get("zombie")
+        self.__sprite_config = self.__config.get("sprites")
+        self.__walk_r = sf.get_surface_from_spritesheet(self.__sprite_config["walk"], 6, 1)
+        self.__walk_l = sf.get_surface_from_spritesheet(self.__sprite_config["walk"], 6, 1, flip=True)
+        self.__atack_r = sf.get_surface_from_spritesheet(self.__sprite_config["atack"], 5, 1)
+        self.__atack_l = sf.get_surface_from_spritesheet(self.__sprite_config["atack"], 5, 1, flip=True)
+        self.__muerte_r = sf.get_surface_from_spritesheet(self.__sprite_config["muerte"], 5, 1)
+        self.__muerte_l = sf.get_surface_from_spritesheet(self.__sprite_config["muerte"], 5, 1, flip=True)
 
         self.enemigos = []
 
@@ -154,12 +156,14 @@ class Zambie(pygame.sprite.Sprite):
 
 
 class Fantasma(pygame.sprite.Sprite):
-    def __init__(self,frame_rate):
+    def __init__(self,frame_rate, diccionario):
         super().__init__()
-        self.__walk_l = sf.get_surface_from_spritesheet(r"Renders\fantasma_walk.png", 12, 1)
-        self.__walk_r = sf.get_surface_from_spritesheet(r"Renders\fantasma_walk.png", 12, 1, flip=True)
-        self.__muerte_r = sf.get_surface_from_spritesheet(r"Renders\fantasma_muerte.png", 5, 1)
-        self.__muerte_l = sf.get_surface_from_spritesheet(r"Renders\fantasma_muerte.png", 5, 1, flip=True)
+        self.__config = diccionario.get("fantom")
+        self.__sprite_config = self.__config.get("sprites")
+        self.__walk_l = sf.get_surface_from_spritesheet(self.__sprite_config["walk"], 12, 1)
+        self.__walk_r = sf.get_surface_from_spritesheet(self.__sprite_config["walk"], 12, 1, flip=True)
+        self.__muerte_r = sf.get_surface_from_spritesheet(self.__sprite_config["muerte"], 5, 1)
+        self.__muerte_l = sf.get_surface_from_spritesheet(self.__sprite_config["muerte"], 5, 1, flip=True)
         self.__move_x = 0
         self.__move_y = 0
         self.__speed_walk = random.randint(7,10)

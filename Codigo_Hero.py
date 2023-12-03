@@ -157,7 +157,8 @@ class Hero(pygame.sprite.Sprite):
         self.shoot(screen)
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
-        self.sprite_group.update() 
+        self.sprite_group.update()
+        self.sprite_group.draw(screen)
         self.draw(screen)
     
     def draw(self, screen: pygame.surface.Surface):

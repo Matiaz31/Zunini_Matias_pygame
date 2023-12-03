@@ -4,12 +4,13 @@
         "enemigos":{
             "zombie":{
                 "sprites":{
-                    "walk": "'Facul/Parcial pygame/Renders/zambie_walk.png'",
-                    "atack": "Facul/Parcial pygame/Renders/zambie_atack.png",
-                    "muerte": "Facul/Parcial pygame/Renders/zambie_death.png"
+                    "walk": "Renders/zambie_walk.png",
+                    "atack": "Renders/zambie_atack.png",
+                    "muerte": "Renders/zambie_death.png"
                 } ,
                 "vida": 100,
-                "velocidad": 1
+                "velocidad_min": 4,
+                "velocidad_max": 7
             },
             "fantom":{
                 "sprites":{
@@ -17,7 +18,8 @@
                     "muerte": "Renders/fantasma_muerte.png"
                 } ,
                 "vida": 100,
-                "velocidad": 1
+                "velocidad_min": 4,
+                "velocidad_max": 7
             },
             "murciegalo":{
                 "sprites":{
@@ -26,7 +28,8 @@
                     "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 50,
-                "velocidad": 1
+                "velocidad_min": 4,
+                "velocidad_max": 7
             },
             "cantidad": 10
         }
@@ -36,12 +39,13 @@
         "enemigos":{
             "zombie":{
                 "sprites":{
-                    "walk": "Facul/Parcial pygame/Renders/zambie_walk.png",
-                    "atack": "Facul/Parcial pygame/Renders/zambie_atack.png",
-                    "muerte": "Facul/Parcial pygame/Renders/zambie_death.png"
+                    "walk": "Renders/zambie_walk.png",
+                    "atack": "Renders/zambie_atack.png",
+                    "muerte": "Renders/zambie_death.png"
                 } ,
                 "vida": 200,
-                "velocidad": 2
+                "velocidad_min": 5,
+                "velocidad_max": 9
             },
             "fantom":{
                 "sprites":{
@@ -49,7 +53,8 @@
                     "muerte": "Renders/fantasma_muerte.png"
                 } ,
                 "vida": 150,
-                "velocidad": 1
+                "velocidad_min": 5,
+                "velocidad_max": 9
             },
             "murciegalo":{
                 "sprites":{
@@ -58,7 +63,8 @@
                     "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 100,
-                "velocidad": 2
+                "velocidad_min": 5,
+                "velocidad_max": 9
             },
             "cantidad": 13
         }
@@ -73,7 +79,8 @@
                     "muerte": "Renders/zambie_death.png"
                 } ,
                 "vida": 300,
-                "velocidad": 2
+                "velocidad_min": 6,
+                "velocidad_max": 10
             },
             "fantom":{
                 "sprites":{
@@ -81,7 +88,8 @@
                     "muerte": "Renders/fantasma_muerte.png"
                 } ,
                 "vida": 200,
-                "velocidad": 2
+                "velocidad_min": 6,
+                "velocidad_max": 10
             },
             "murciegalo":{
                 "sprites":{
@@ -90,7 +98,8 @@
                     "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 150,
-                "velocidad": 3
+                "velocidad_min": 6,
+                "velocidad_max": 10
             },
             "cantidad": 16
         }
