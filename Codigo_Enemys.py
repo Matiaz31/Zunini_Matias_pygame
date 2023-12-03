@@ -4,7 +4,7 @@ from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
 from Codigo_Auxi import SurfaceManager as sf
 
 class Zambie(pygame.sprite.Sprite):
-    def __init__(self,frame_rate, hero_rect):
+    def __init__(self,frame_rate, hero_rect, diccionario):
         super().__init__()
         self.__walk_r = sf.get_surface_from_spritesheet("Renders\zambie_walk.png", 6, 1)
         self.__walk_l = sf.get_surface_from_spritesheet("Renders\zambie_walk.png", 6, 1, flip=True)
@@ -122,17 +122,6 @@ class Zambie(pygame.sprite.Sprite):
             self.__enemy_move_time = 0
             self.__rect.x += self.__set_borders_limits_x()
             self.__rect.y += self.__set_borders_limits_y()
-    
-
-    # def do_animation(self, delta_ms):
-    #     self.__enemy_animation_time += delta_ms
-    #     if self.__enemy_animation_time >= self.__frame_rate:
-    #         self.__enemy_animation_time = 0
-    #         if self.__actual_frame < len(self.__actual_animation) - 1:
-    #             self.__actual_frame += 1
-    #         else:
-    #             if self.__is_alive:
-    #                 self.__actual_frame = 0
 
     def do_animation(self, delta_ms):
         self.__enemy_animation_time += delta_ms

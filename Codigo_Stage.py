@@ -28,7 +28,7 @@ class Stage:
 
     def spawnear_enemigos(self):
         for _ in range(self.__max_enemies):
-            zambie = Zambie(100,self.player_sprite.get_rect)
+            zambie = Zambie(100,self.player_sprite.get_rect, self.__enemis_config)
             fantom = Fantasma(100)
             zambie.enemigos.append(zambie)
             self.enemies.add(fantom)
