@@ -14,8 +14,6 @@ class Hero(pygame.sprite.Sprite):
         self.daño = 50* self.nivel
         self.puntaje = 0
 
-        self.rect.x = ANCHO_VENTANA/2
-        self.rect.y = ALTO_VENTANA/2
 
         self.__iddle_l = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1, flip=True)
         self.__iddle_r = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1)
@@ -36,9 +34,12 @@ class Hero(pygame.sprite.Sprite):
         self.__initial_frame = 0
         self.__actual_animation = self.__iddle_r
         self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
-        self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
 
+        self.rect = self.__actual_img_animation.get_rect()
+        self.rect.x = ANCHO_VENTANA/2
+        self.rect.y = ALTO_VENTANA/2
+        
         self.__fire_moment = 1
         self.__fire_cooldawn = self.__player_config["cooldawn"]
         self.__fire = False

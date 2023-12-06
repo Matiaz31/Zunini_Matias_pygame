@@ -121,3 +121,15 @@ class Game:
                             self.volumen -= 0.1
 
             pygame.display.update()
+    
+    def you_lost(self):
+        if self.game.perdiste==True:
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    pygame.quit()
+            pygame.display.set_caption("Space Invader")
+            pantalla.blit(self.game.fondo,(0,0))
+            Texto = get_font(45).render("Game Over",True, "Black")
+            pantalla.blit(Texto,(240,170))
+
+            pygame.display.update()

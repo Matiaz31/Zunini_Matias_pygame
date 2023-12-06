@@ -19,6 +19,7 @@ class Stage:
         self.__limit_h = limit_h
         self.__main_screen = screen
         self.fondo = pygame.image.load(self.__mapa_config["fondo"]).convert_alpha()
+        self.perdiste = False
 
         self.enemies_class = []
         self.spawnear_enemigos()
@@ -42,7 +43,6 @@ class Stage:
         self.player_sprite.update(delta_ms, self.__main_screen)
         self.player_sprite.draw(self.__main_screen)
 
-        print(self.player_sprite.daño)
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)
             for enemi in self.enemies:
@@ -62,10 +62,15 @@ class Stage:
 
         for enemy in self.enemies:
             if pygame.sprite.spritecollide(enemy, self.player, True):
-                print("Moriste")
+                self.player_sprite.vida -= 300
+                print(self.player_sprite.vida)
+                if self.player_sprite.vida == 0:
+                    self.perdiste = True
+                    
             
     def play_music(self, volumen, que):
         volumen += 0
         pygame.mixer.music.load(que)
         pygame.mixer.music.set_volume(volumen)
         pygame.mixer.music.play()
+    
