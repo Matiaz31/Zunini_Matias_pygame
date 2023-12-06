@@ -23,7 +23,8 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.options()
-
+            if self.game.perdiste == True:
+                self.you_lost()
             
             delta_ms = clock.tick(60)
             pantalla.blit(self.game.fondo, (0,0))
@@ -124,12 +125,13 @@ class Game:
     
     def you_lost(self):
         if self.game.perdiste==True:
-            for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
-                    pygame.quit()
-            pygame.display.set_caption("Space Invader")
-            pantalla.blit(self.game.fondo,(0,0))
-            Texto = get_font(45).render("Game Over",True, "Black")
-            pantalla.blit(Texto,(240,170))
+            while True:
+                for evento in pygame.event.get():
+                    if evento.type == pygame.QUIT:
+                        pygame.quit()
 
-            pygame.display.update()
+                pantalla.blit(self.game.fondo,(0,0))
+                Texto = get_font(150).render("Game Over",True, "Black")
+                pantalla.blit(Texto,(260,170))
+
+                pygame.display.update()

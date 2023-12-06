@@ -62,7 +62,7 @@ class Stage:
 
         for enemy in self.enemies:
             if pygame.sprite.spritecollide(enemy, self.player, True):
-                self.player_sprite.vida -= 300
+                self.player_sprite.vida -= 100
                 print(self.player_sprite.vida)
                 if self.player_sprite.vida == 0:
                     self.perdiste = True
