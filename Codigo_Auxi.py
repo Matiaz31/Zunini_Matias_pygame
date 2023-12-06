@@ -2,7 +2,6 @@ import pygame
 import math
 import json
 
-
 class SurfaceManager:
     @staticmethod
     def get_surface_from_spritesheet(img_path: str, cols: int, rows: int, step = 1, flip: bool = False) -> list[pygame.surface.Surface]:

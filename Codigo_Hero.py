@@ -23,17 +23,19 @@ class Hero(pygame.sprite.Sprite):
         self.__speed_walk = self.__player_config["velocidad"]
         self.__frame_rate = frame_rate
         self.__vida = self.__player_config["vida"]
+        self.nivel = 1
+        self.daño = 50* self.nivel
 
         self.__player_move_time = 0
         self.__player_animation_time = 0
         self.__initial_frame = 0
         self.__actual_animation = self.__iddle_r
         self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
-        self.__rect = self.__actual_img_animation.get_rect()
+        self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
 
-        self.__rect.x = ANCHO_VENTANA/2
-        self.__rect.y = ALTO_VENTANA/2
+        self.rect.x = ANCHO_VENTANA/2
+        self.rect.y = ALTO_VENTANA/2
 
         self.__fire_moment = 1
         self.__fire_cooldawn = self.__player_config["cooldawn"]
@@ -49,7 +51,7 @@ class Hero(pygame.sprite.Sprite):
         
     @property
     def get_rect(self):
-        return self.__rect
+        return self.rect
     
     @property
     def get_bullets(self) -> list[Bullet]:
@@ -106,17 +108,17 @@ class Hero(pygame.sprite.Sprite):
     def __set_borders_limits_x(self):
         pixels_move = 0
         if self.__move_x > 0:
-            pixels_move = self.__move_x if self.__rect.x < ANCHO_VENTANA - self.__actual_img_animation.get_width() else 0
+            pixels_move = self.__move_x if self.rect.x < ANCHO_VENTANA - self.__actual_img_animation.get_width() else 0
         elif self.__move_x < 0:
-            pixels_move = self.__move_x if self.__rect.x > 0 else 0
+            pixels_move = self.__move_x if self.rect.x > 0 else 0
         return pixels_move
     
     def __set_borders_limits_y(self):
         pixels_move = 0
         if self.__move_y > 0:
-            pixels_move = self.__move_y if self.__rect.y < ALTO_VENTANA - self.__actual_img_animation.get_height() else 0
+            pixels_move = self.__move_y if self.rect.y < ALTO_VENTANA - self.__actual_img_animation.get_height() else 0
         elif self.__move_y < 0:
-            pixels_move = self.__move_y if self.__rect.y > 0 else 0
+            pixels_move = self.__move_y if self.rect.y > 0 else 0
         return pixels_move
     
 
@@ -124,8 +126,8 @@ class Hero(pygame.sprite.Sprite):
         self.__player_move_time += delta_ms
         if self.__player_move_time >= self.__frame_rate:
             self.__player_move_time = 0
-            self.__rect.x += self.__set_borders_limits_x()
-            self.__rect.y += self.__set_borders_limits_y()
+            self.rect.x += self.__set_borders_limits_x()
+            self.rect.y += self.__set_borders_limits_y()
     
     def teclas(self):
         lista_teclas_presionadas = pygame.key.get_pressed()
@@ -159,7 +161,7 @@ class Hero(pygame.sprite.Sprite):
     
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
-        screen.blit(self.__actual_img_animation, self.__rect)
+        screen.blit(self.__actual_img_animation, self.rect)
 
     def shoot(self,pantalla):
         if self.shoot_recharge():
@@ -171,7 +173,7 @@ class Hero(pygame.sprite.Sprite):
     def shoot_recharge(self):
         momento = pygame.time.get_ticks()/1000
         if not self.__fire:
-            print(self.__fire_moment)
+            #print(self.__fire_moment)
             if momento - self.__fire_moment >= self.__fire_cooldawn:
                 print(momento)
                 return True
@@ -179,13 +181,13 @@ class Hero(pygame.sprite.Sprite):
 
     def shoot_create(self, bala: int):
         if bala == 1:
-            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Right-Up")
+            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Up")
         elif bala == 2:
-            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Left-Up")
+            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Up")
         elif bala == 3:
-            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Right-Down")
+            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Down")
         elif bala == 4:
-            return Bullet(self.__rect.centerx,self.__rect.centery,  self.__bullet_img, "Left-Down")   
+            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Down")   
     
     def dash(self):
         if self.dash_recharge():

@@ -26,11 +26,14 @@ class Stage:
         for enemy in self.enemies_class:
             self.enemies.add(enemy)
 
+    def agujeros(self):
+        pass
+
     def spawnear_enemigos(self):
         for _ in range(self.__max_enemies):
             zambie = Zambie(100,self.player_sprite.get_rect, self.__enemis_config)
             fantom = Fantasma(100, self.__enemis_config)
-            zambie.enemigos.append(zambie)
+
             self.enemies.add(fantom)
             self.enemies.add(zambie)
 
@@ -39,15 +42,30 @@ class Stage:
         self.player_sprite.update(delta_ms, self.__main_screen)
         self.player_sprite.draw(self.__main_screen)
 
+        print(self.player_sprite.daño)
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)
-            pygame.sprite.spritecollide(bullet, self.enemies, True)
+            for enemi in self.enemies:
+                if pygame.sprite.collide_rect(bullet, enemi):
+                    bullet.kill()
+                    enemi.vida -= self.player_sprite.daño
+                    if enemi.vida <= 0:
+                        enemi.kill()
             cantidad_despues = len(self.enemies)
             if cantidad_antes > cantidad_despues:
-                bullet.kill()
                 cantidad_vencido = cantidad_antes - cantidad_despues
                 self.player_sprite.puntaje += cantidad_vencido * 60
                 print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
             if len(self.enemies) == 0 and not self.__player_win:
                 self.__player_win = True
                 print(f'Ganaste la partida con: {self.player_sprite.puntaje} Puntos!')
+
+        for enemy in self.enemies:
+            if pygame.sprite.spritecollide(enemy, self.player, True):
+                print("Moriste")
+            
+    def play_music(self, volumen, que):
+        volumen += 0
+        pygame.mixer.music.load(que)
+        pygame.mixer.music.set_volume(volumen)
+        pygame.mixer.music.play()

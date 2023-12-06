@@ -8,14 +8,13 @@ class Zambie(pygame.sprite.Sprite):
         super().__init__()
         self.__config = diccionario.get("zombie")
         self.__sprite_config = self.__config.get("sprites")
+
         self.__walk_r = sf.get_surface_from_spritesheet(self.__sprite_config["walk"], 6, 1)
         self.__walk_l = sf.get_surface_from_spritesheet(self.__sprite_config["walk"], 6, 1, flip=True)
         self.__atack_r = sf.get_surface_from_spritesheet(self.__sprite_config["atack"], 5, 1)
         self.__atack_l = sf.get_surface_from_spritesheet(self.__sprite_config["atack"], 5, 1, flip=True)
         self.__muerte_r = sf.get_surface_from_spritesheet(self.__sprite_config["muerte"], 5, 1)
         self.__muerte_l = sf.get_surface_from_spritesheet(self.__sprite_config["muerte"], 5, 1, flip=True)
-
-        self.enemigos = []
 
         self.__move_x = 0
         self.__move_y = 0
@@ -40,6 +39,7 @@ class Zambie(pygame.sprite.Sprite):
         self.__is_atacking = False
 
         self.__is_alive = True
+        self.vida = self.__config["vida"]
         self.__spawn_momento = 0
         
 
@@ -144,6 +144,7 @@ class Zambie(pygame.sprite.Sprite):
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         screen.blit(self.__actual_img_animation, self.rect)
+        
 
     def generador(self):
         momento = pygame.time.get_ticks()/1000
@@ -177,6 +178,7 @@ class Fantasma(pygame.sprite.Sprite):
         self.rect.x = random.randint(0,200)
         self.rect.y = random.randint(0,600)
         self.sprite_group = pygame.sprite.Group()
+        self.vida = self.__config["vida"]
 
 
     def __set_borders_limits_x(self):

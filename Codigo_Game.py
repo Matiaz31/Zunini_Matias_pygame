@@ -7,14 +7,14 @@ from Codigo_Auxi import get_font
 
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 clock = pygame.time.Clock()
-
 class Game:
     def __init__(self, stage_name: str) -> None:
         self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, stage_name)
         pygame.init()
-
+        self.volumen = 0
+        
     def play(self):
-
+        self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -24,12 +24,15 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.options()
 
-            pantalla.blit(self.game.fondo, (0,0))
+            
             delta_ms = clock.tick(60)
+            pantalla.blit(self.game.fondo, (0,0))
+            pantalla.blit(get_font(40).render(f"Tiempo: {delta_ms/1000}",True, "Black"), (10,10))
             self.game.run(delta_ms)
-            pygame.display.flip()
+            pygame.display.update()
 
     def main_menu(self):
+        self.game.play_music(self.volumen, "Renders\menu_chill.wav")
         menu = True
         while menu:
             pantalla.blit(self.game.fondo, (0, 0))
@@ -81,16 +84,26 @@ class Game:
             OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
             OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_VENTANA/2, 260))
             pantalla.blit(OPTIONS_TEXT, OPTIONS_RECT)
+            VOLUMEN_TXT = get_font(75).render(f"Volumen: {round(self.volumen,1)}", True, "Black")
+            pantalla.blit(VOLUMEN_TXT,(380,430))
 
-            OPTIONS_BACK = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
+            OPTIONS_BACK = Button(image=None, pos=(ANCHO_VENTANA/2, 350), 
                                 text_input="Play", font=get_font(75), base_color="Black", hovering_color="Green")
-            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 460), 
+            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
                                 text_input="Menu", font=get_font(75), base_color="Black", hovering_color="Green")
+            VOLUME_MAS = Button(image=None, pos=(ANCHO_VENTANA/1.5, 450), 
+                                text_input="+", font=get_font(75), base_color="Black", hovering_color="Green")
+            VOLUME_MENOS = Button(image=None, pos=(360, 450), 
+                                text_input="-", font=get_font(75), base_color="Black", hovering_color="Green")
 
             OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
             OPTIONS_BACK.update(pantalla)
             MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
             MEIN_MENU_BUTTON.update(pantalla)
+            VOLUME_MAS.changeColor(OPTIONS_MOUSE_POS)
+            VOLUME_MAS.update(pantalla)
+            VOLUME_MENOS.changeColor(OPTIONS_MOUSE_POS)
+            VOLUME_MENOS.update(pantalla)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -100,5 +113,11 @@ class Game:
                         self.play()
                     if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                         self.main_menu()
+                    if VOLUME_MAS.checkForInput(OPTIONS_MOUSE_POS):
+                        if self.volumen < 0.9:
+                            self.volumen += 0.1
+                    if VOLUME_MENOS.checkForInput(OPTIONS_MOUSE_POS):
+                        if self.volumen > 0.1:
+                            self.volumen -= 0.1
 
             pygame.display.update()

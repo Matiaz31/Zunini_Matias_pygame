@@ -17,7 +17,7 @@
                     "walk": "Renders/fantasma_walk.png",
                     "muerte": "Renders/fantasma_muerte.png"
                 } ,
-                "vida": 100,
+                "vida": 50,
                 "velocidad_min": 4,
                 "velocidad_max": 7
             },
