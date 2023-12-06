@@ -1,4 +1,5 @@
 import pygame
+import random
 from Codigo_Hero import Hero
 from Codigo_Enemys import Zambie,Fantasma
 from Codigo_Auxi import (open_configs)
@@ -21,17 +22,29 @@ class Stage:
         self.fondo = pygame.image.load(self.__mapa_config["fondo"]).convert_alpha()
         self.perdiste = False
 
-        self.enemies_class = []
-        self.spawnear_enemigos()
+        self.enemi_is_hit = False
+        self.all_enemies = []
+        self.spawnear_enemigos(self.__max_enemies)
 
-        for enemy in self.enemies_class:
-            self.enemies.add(enemy)
+        # for enemy in self.enemies_class:
+        #     self.enemies.add(enemy)
 
     def agujeros(self):
         pass
 
-    def spawnear_enemigos(self):
-        for _ in range(self.__max_enemies):
+    def spawnear_enemigos(self, cantidad):
+        for _ in range(cantidad):
+            zambie = Zambie(100,self.player_sprite.get_rect, self.__enemis_config)
+            fantom = Fantasma(100, self.__enemis_config)
+
+            self.enemies.add(fantom)
+            self.enemies.add(zambie)
+            self.all_enemies.append(fantom)
+            self.all_enemies.append(zambie)
+
+    def create_enemigos(self, cantidad):
+        for _ in range(cantidad):
+            
             zambie = Zambie(100,self.player_sprite.get_rect, self.__enemis_config)
             fantom = Fantasma(100, self.__enemis_config)
 
@@ -42,6 +55,7 @@ class Stage:
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
         self.player_sprite.draw(self.__main_screen)
+        self.__configs.update()
 
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)
@@ -60,12 +74,15 @@ class Stage:
                 self.__player_win = True
                 print(f'Ganaste la partida con: {self.player_sprite.puntaje} Puntos!')
 
+        if len(self.enemies) < len(self.all_enemies):
+            cantidad = len(self.all_enemies) - len(self.enemies)
+            print(cantidad)
+            self.create_enemigos(cantidad)
+
+    def enemies_hit(self):
         for enemy in self.enemies:
-            if pygame.sprite.spritecollide(enemy, self.player, True):
-                self.player_sprite.vida -= 100
-                print(self.player_sprite.vida)
-                if self.player_sprite.vida == 0:
-                    self.perdiste = True
+            if pygame.sprite.spritecollideany(enemy, self.player):
+                return True
                     
             
     def play_music(self, volumen, que):

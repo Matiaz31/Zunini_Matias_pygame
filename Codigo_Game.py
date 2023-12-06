@@ -9,11 +9,14 @@ pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 clock = pygame.time.Clock()
 class Game:
     def __init__(self, stage_name: str) -> None:
-        self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, stage_name)
+        self.dificultad = stage_name
+        self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, self.dificultad)
         pygame.init()
         self.volumen = 0
+        self.tiempo_transcurrido = 0
         
     def play(self):
+        print(self.dificultad)
         self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
         while True:
             for event in pygame.event.get():
@@ -28,9 +31,13 @@ class Game:
             
             delta_ms = clock.tick(60)
             pantalla.blit(self.game.fondo, (0,0))
-            pantalla.blit(get_font(40).render(f"Tiempo: {pygame.time.get_ticks()/1000}",True, "Black"), (10,10))
+            self.tiempo_transcurrido = pygame.time.get_ticks()/1000
+            pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
             self.game.run(delta_ms)
+            self.game.enemies_hit()
             pygame.display.update()
+            if self.tiempo_transcurrido >= 20:
+                self.dificultad = "dificultad_2"
 
     def main_menu(self):
         self.game.play_music(self.volumen, "Renders\menu_chill.wav")

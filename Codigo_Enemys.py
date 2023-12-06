@@ -31,8 +31,17 @@ class Zambie(pygame.sprite.Sprite):
         self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
 
-        self.rect.x = random.randint(0,1080)
-        self.rect.y = random.randint(0,200)
+        self.x = random.randint(0,ANCHO_VENTANA)
+        if self.x > 350 and self.x < 700:
+            pass
+        else:
+            self.rect.x = self.x
+        self.y = random.randint(0,ALTO_VENTANA)
+        if self.y > 200 and self.y < 500:
+            pass
+        else:
+            self.rect.y = self.y
+
         self.sprite_group = pygame.sprite.Group()
 
         self.__hero_rect = hero_rect
