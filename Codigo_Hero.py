@@ -9,6 +9,14 @@ class Hero(pygame.sprite.Sprite):
         self.__player_config = diccionario.get("estadisticas_hero")
         self.__sprites_config = self.__player_config.get("sprites")
 
+        self.vida = self.__player_config["vida"]
+        self.nivel = 1
+        self.daño = 50* self.nivel
+        self.puntaje = 0
+
+        self.rect.x = ANCHO_VENTANA/2
+        self.rect.y = ALTO_VENTANA/2
+
         self.__iddle_l = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1, flip=True)
         self.__iddle_r = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1)
         self.__walk_l = sf.get_surface_from_spritesheet(self.__sprites_config["walk"], 6, 1, flip=True)
@@ -16,15 +24,12 @@ class Hero(pygame.sprite.Sprite):
         self.__is_stay = True
 
         self.__bullet_img = self.__sprites_config["bala"]
-        self.puntaje = 0
 
         self.__move_x = 0
         self.__move_y = 0
         self.__speed_walk = self.__player_config["velocidad"]
+        self.__speed_walk += self.nivel
         self.__frame_rate = frame_rate
-        self.__vida = self.__player_config["vida"]
-        self.nivel = 1
-        self.daño = 50* self.nivel
 
         self.__player_move_time = 0
         self.__player_animation_time = 0
@@ -33,9 +38,6 @@ class Hero(pygame.sprite.Sprite):
         self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
         self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
-
-        self.rect.x = ANCHO_VENTANA/2
-        self.rect.y = ALTO_VENTANA/2
 
         self.__fire_moment = 1
         self.__fire_cooldawn = self.__player_config["cooldawn"]

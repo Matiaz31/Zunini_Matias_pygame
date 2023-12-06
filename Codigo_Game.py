@@ -27,7 +27,7 @@ class Game:
             
             delta_ms = clock.tick(60)
             pantalla.blit(self.game.fondo, (0,0))
-            pantalla.blit(get_font(40).render(f"Tiempo: {delta_ms/1000}",True, "Black"), (10,10))
+            pantalla.blit(get_font(40).render(f"Tiempo: {pygame.time.get_ticks()/1000}",True, "Black"), (10,10))
             self.game.run(delta_ms)
             pygame.display.update()
 

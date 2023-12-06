@@ -113,7 +113,7 @@
             "bala": "Renders/energi_ball.png"
         } ,
         "vida": 300,
-        "velocidad": 10,
+        "velocidad": 8,
         "cooldawn": 3
     },
     "config_mundo": 
