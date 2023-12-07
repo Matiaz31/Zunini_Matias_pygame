@@ -116,7 +116,8 @@
         } ,
         "vida": 300,
         "velocidad": 8,
-        "cooldawn": 3
+        "cooldawn_bala": 2.5,
+        "cooldawn_flecha": 3.5
     },
     "config_mundo": 
     {

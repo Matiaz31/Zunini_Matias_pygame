@@ -12,6 +12,8 @@ class Game:
         self.dificultad = stage_name
         self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, self.dificultad)
         pygame.init()
+        pygame.display.set_caption("Wizzzard")
+        pygame.display.set_icon(pygame.image.load("Renders/gema.png"))
         self.volumen = 0
         self.tiempo_transcurrido = 0
         

@@ -1,6 +1,6 @@
 import pygame
 from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
-from Codigo_Bullet import Bullet
+from Codigo_Bullet import Bala,Flecha
 from Codigo_Auxi import SurfaceManager as sf
 
 class Hero(pygame.sprite.Sprite):
@@ -43,7 +43,9 @@ class Hero(pygame.sprite.Sprite):
         self.rect.x = ANCHO_VENTANA/2
         self.rect.y = ALTO_VENTANA/2
         
-        self.__fire_cooldawn = self.__player_config["cooldawn"]
+        self.__bala_cooldawn = self.__player_config["cooldawn_bala"]
+        self.__flecha_cooldawn = self.__player_config["cooldawn_flecha"]
+
         self.__bullet_moment = 1
         self.__fire_bullet = False
         self.__flecha_moment = 1
@@ -59,11 +61,11 @@ class Hero(pygame.sprite.Sprite):
         self.__sprite_flecha_group = pygame.sprite.Group()
     
     @property
-    def get_bullets(self) -> list[Bullet]:
+    def get_bullets(self) -> list[Bala]:
         return self.__sprite_bullet_group
     
     @property
-    def get_flechas(self) -> list[Bullet]:
+    def get_flechas(self) -> list[Flecha]:
         return self.__sprite_flecha_group
     
     def __set_x_animations_preset(self, move_x, animation_list: list[pygame.surface.Surface], look_r: bool):
@@ -187,34 +189,34 @@ class Hero(pygame.sprite.Sprite):
     def shoot_recharge(self):
         momento = pygame.time.get_ticks()/1000
         if not self.__fire_bullet:
-            if momento - self.__bullet_moment >= self.__fire_cooldawn:
+            if momento - self.__bullet_moment >= self.__bala_cooldawn:
                 return True
         if not self.__fire_flecha:
-            if momento - self.__bullet_moment >= self.__fire_cooldawn:
+            if momento - self.__bullet_moment >= self.__bala_cooldawn:
                 return True
         if not self.__fire_flecha:
-            if momento - self.__flecha_moment >= self.__fire_cooldawn:
+            if momento - self.__flecha_moment >= self.__flecha_cooldawn:
                 return True
         if not self.__fire_flecha:
-            if momento - self.__flecha_moment >= self.__fire_cooldawn:
+            if momento - self.__flecha_moment >= self.__flecha_cooldawn:
                 return True
         return False
 
     def bala_create(self, bala: int):
         if bala == 1:
-            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Up")
+            return Bala(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Up")
         elif bala == 2:
-            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Up")
+            return Bala(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Up")
         elif bala == 3:
-            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Down")
+            return Bala(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Down")
         elif bala == 4:
-            return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Down")   
+            return Bala(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Down")   
         
     def flecha_create(self, direccion: str):
         if direccion == "Right":
-            return Bullet(self.rect.centerx,self.rect.centery,  self.__flecha_img_r, direccion)
+            return Flecha(self.rect.centerx,self.rect.centery,  self.__flecha_img_r, direccion)
         else:
-            return Bullet(self.rect.centerx,self.rect.centery,  self.__flecha_img_l, direccion)
+            return Flecha(self.rect.centerx,self.rect.centery,  self.__flecha_img_l, direccion)
 
 
 
