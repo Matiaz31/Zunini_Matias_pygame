@@ -9,7 +9,7 @@ from Codigo_Auxi import (open_configs)
 class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
         self.__configs = open_configs()
-        self.player_sprite = Hero(50, 8, self.__configs)
+        self.player_sprite = Hero(50,self.__configs)
         self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
         self.dificultad = dificultad
