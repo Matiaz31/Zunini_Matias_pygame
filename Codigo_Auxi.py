@@ -30,7 +30,7 @@ def move_coords(angle, radius, coords):
     return coords[0] + radius * math.cos(theta), coords[1] + radius * math.sin(theta)
 
 def get_font(size):
-        return pygame.font.Font(None, size)
+    return pygame.font.Font(None, size)
 
 def open_configs() -> dict:
     with open("Json_data.json", "r", encoding="utf-8") as config:

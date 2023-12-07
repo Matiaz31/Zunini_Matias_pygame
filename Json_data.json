@@ -110,7 +110,9 @@
             "idle": "Renders/hero_iddle.png",
             "walk": "Renders/hero_walk.png",
             "muerte": "",
-            "bala": "Renders/energi_ball.png"
+            "bala": "Renders/energi_ball.png",
+            "flecha_r": "Renders/flecha_r.png",
+            "flecha_l": "Renders/flecha_l.png"
         } ,
         "vida": 300,
         "velocidad": 8,
@@ -118,7 +120,11 @@
     },
     "config_mundo": 
     {
-        "fondo":"Renders/fondo.png"
+        "fondo":"Renders/fondo.png",
+        "fosa": "Renders/fosa.png",
+        "gema": "Renders/gema.png",
+        "heart": "Renders/heart.png"
+
     }
 }
 

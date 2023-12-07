@@ -31,10 +31,10 @@ class Game:
             
             delta_ms = clock.tick(60)
             pantalla.blit(self.game.fondo, (0,0))
-            self.tiempo_transcurrido = pygame.time.get_ticks()/1000
+            self.tiempo_transcurrido = pygame.time.get_ticks()//1000
             pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
             self.game.run(delta_ms)
-            self.game.enemies_hit()
+            #self.game.enemies_hit()
             pygame.display.update()
             if self.tiempo_transcurrido >= 20:
                 self.dificultad = "dificultad_2"
@@ -47,7 +47,7 @@ class Game:
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            MENU_TEXT = get_font(75).render("MAIN MENU", True, "#b68f40")
+            MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(ANCHO_VENTANA/2, 100))
 
             PLAY_BUTTON = Button(image=pygame.image.load("Renders\Play Rect.png"), pos=(ANCHO_VENTANA/2, 250), 
@@ -87,7 +87,7 @@ class Game:
         while True:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
-            pantalla.fill("white")
+            pantalla.fill((150,190,190))
 
             OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
             OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_VENTANA/2, 260))
@@ -96,13 +96,13 @@ class Game:
             pantalla.blit(VOLUMEN_TXT,(380,430))
 
             OPTIONS_BACK = Button(image=None, pos=(ANCHO_VENTANA/2, 350), 
-                                text_input="Play", font=get_font(75), base_color="Black", hovering_color="Green")
+                                text_input="Play", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
             MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
-                                text_input="Menu", font=get_font(75), base_color="Black", hovering_color="Green")
+                                text_input="Menu", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
             VOLUME_MAS = Button(image=None, pos=(ANCHO_VENTANA/1.5, 450), 
-                                text_input="+", font=get_font(75), base_color="Black", hovering_color="Green")
+                                text_input="+", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
             VOLUME_MENOS = Button(image=None, pos=(360, 450), 
-                                text_input="-", font=get_font(75), base_color="Black", hovering_color="Green")
+                                text_input="-", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
 
             OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
             OPTIONS_BACK.update(pantalla)

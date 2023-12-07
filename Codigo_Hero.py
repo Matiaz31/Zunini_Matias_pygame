@@ -11,8 +11,9 @@ class Hero(pygame.sprite.Sprite):
 
         self.vida = self.__player_config["vida"]
         self.nivel = 1
-        self.daño = 50* self.nivel
-        self.puntaje = 0
+        self.daño_bala = 100* self.nivel
+        self.daño_flecha = 50* self.nivel
+        self.__puntaje = 0
 
 
         self.__iddle_l = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1, flip=True)
@@ -22,6 +23,8 @@ class Hero(pygame.sprite.Sprite):
         self.__is_stay = True
 
         self.__bullet_img = self.__sprites_config["bala"]
+        self.__flecha_img_r = self.__sprites_config["flecha_r"]
+        self.__flecha_img_l = self.__sprites_config["flecha_l"]
 
         self.__move_x = 0
         self.__move_y = 0
@@ -40,9 +43,11 @@ class Hero(pygame.sprite.Sprite):
         self.rect.x = ANCHO_VENTANA/2
         self.rect.y = ALTO_VENTANA/2
         
-        self.__fire_moment = 1
         self.__fire_cooldawn = self.__player_config["cooldawn"]
-        self.__fire = False
+        self.__bullet_moment = 1
+        self.__fire_bullet = False
+        self.__flecha_moment = 1
+        self.__fire_flecha = False
 
         self.__dash_moment = 1
         self.__dash_cooldawn = 2
@@ -51,14 +56,15 @@ class Hero(pygame.sprite.Sprite):
         self.__dash_direccion = "Right"
 
         self.__sprite_bullet_group = pygame.sprite.Group()
-        
-    @property
-    def get_rect(self):
-        return self.rect
+        self.__sprite_flecha_group = pygame.sprite.Group()
     
     @property
     def get_bullets(self) -> list[Bullet]:
         return self.__sprite_bullet_group
+    
+    @property
+    def get_flechas(self) -> list[Bullet]:
+        return self.__sprite_flecha_group
     
     def __set_x_animations_preset(self, move_x, animation_list: list[pygame.surface.Surface], look_r: bool):
         self.__move_x = move_x
@@ -168,21 +174,33 @@ class Hero(pygame.sprite.Sprite):
 
     def shoot(self,pantalla):
         if self.shoot_recharge():
-            self.__fire_moment = pygame.time.get_ticks()/1000
+            self.__bullet_moment = pygame.time.get_ticks()/1000
             for i in range(1,5):
-                self.__sprite_bullet_group.add(self.shoot_create(i))
-            self.fire = False
+                self.__sprite_bullet_group.add(self.bala_create(i))
+            self.__fire_bullet = False
+            self.__flecha_moment = pygame.time.get_ticks()/1000
+            if self.__is_looking_right:
+                self.__sprite_bullet_group.add(self.flecha_create("Right"))
+            else:
+                self.__sprite_bullet_group.add(self.flecha_create("Left"))
 
     def shoot_recharge(self):
         momento = pygame.time.get_ticks()/1000
-        if not self.__fire:
-            #print(self.__fire_moment)
-            if momento - self.__fire_moment >= self.__fire_cooldawn:
-                print(momento)
+        if not self.__fire_bullet:
+            if momento - self.__bullet_moment >= self.__fire_cooldawn:
+                return True
+        if not self.__fire_flecha:
+            if momento - self.__bullet_moment >= self.__fire_cooldawn:
+                return True
+        if not self.__fire_flecha:
+            if momento - self.__flecha_moment >= self.__fire_cooldawn:
+                return True
+        if not self.__fire_flecha:
+            if momento - self.__flecha_moment >= self.__fire_cooldawn:
                 return True
         return False
 
-    def shoot_create(self, bala: int):
+    def bala_create(self, bala: int):
         if bala == 1:
             return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Up")
         elif bala == 2:
@@ -191,22 +209,31 @@ class Hero(pygame.sprite.Sprite):
             return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Right-Down")
         elif bala == 4:
             return Bullet(self.rect.centerx,self.rect.centery,  self.__bullet_img, "Left-Down")   
+        
+    def flecha_create(self, direccion: str):
+        if direccion == "Right":
+            return Bullet(self.rect.centerx,self.rect.centery,  self.__flecha_img_r, direccion)
+        else:
+            return Bullet(self.rect.centerx,self.rect.centery,  self.__flecha_img_l, direccion)
+
+
+
     
-    def dash(self):
-        if self.dash_recharge():
-            self.__dash_moment = pygame.time.get_ticks()/1000
-            match self.__dash_direccion:
-                case "Right":
-                    look_right = True
-                    self.__set_x_animations_preset(self.__dash_power, self.__walk_r, look_right)
-                case "Left":
-                    look_right = False
-                    self.__set_x_animations_preset(-self.__dash_power, self.__walk_r, look_right)
-            self.__dash = False
+    # def dash(self):
+    #     if self.dash_recharge():
+    #         self.__dash_moment = pygame.time.get_ticks()/1000
+    #         match self.__dash_direccion:
+    #             case "Right":
+    #                 look_right = True
+    #                 self.__set_x_animations_preset(self.__dash_power, self.__walk_r, look_right)
+    #             case "Left":
+    #                 look_right = False
+    #                 self.__set_x_animations_preset(-self.__dash_power, self.__walk_r, look_right)
+    #         self.__dash = False
                 
-    def dash_recharge(self):
-        momento = pygame.time.get_ticks()/1000
-        if not self.__dash:
-            if momento - self.__dash_moment <= self.__dash_cooldawn:
-                return True
-        return False
+    # def dash_recharge(self):
+    #     momento = pygame.time.get_ticks()/1000
+    #     if not self.__dash:
+    #         if momento - self.__dash_moment <= self.__dash_cooldawn:
+    #             return True
+    #     return False

@@ -31,20 +31,25 @@ class Zambie(pygame.sprite.Sprite):
         self.rect = self.__actual_img_animation.get_rect()
         self.__is_looking_right = True
 
+        self.__hero_rect = hero_rect
+        self.__hero_x_1 = self.__hero_rect.centerx - 100
+        self.__hero_y_1 = self.__hero_rect.centery - 100
+        self.__hero_x_2 = self.__hero_rect.centerx + 100
+        self.__hero_y_2 = self.__hero_rect.centery + 100
+
         self.x = random.randint(0,ANCHO_VENTANA)
-        if self.x > 350 and self.x < 700:
+        if self.x > self.__hero_x_1 and self.x < self.__hero_x_2:
             pass
         else:
             self.rect.x = self.x
         self.y = random.randint(0,ALTO_VENTANA)
-        if self.y > 200 and self.y < 500:
+        if self.y > self.__hero_y_1 and self.y < self.__hero_y_2:
             pass
         else:
             self.rect.y = self.y
 
         self.sprite_group = pygame.sprite.Group()
 
-        self.__hero_rect = hero_rect
         self.__is_atacking = False
 
         self.__is_alive = True
@@ -153,14 +158,6 @@ class Zambie(pygame.sprite.Sprite):
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
         screen.blit(self.__actual_img_animation, self.rect)
-        
-
-    def generador(self):
-        momento = pygame.time.get_ticks()/1000
-        if momento - self.__spawn_momento >= 2:
-            enemigo = self(self.__frame_rate, self.__hero_rect)
-            pygame.sprite.Group.add(enemigo)
-            self.__spawn_momento = pygame.time.get_ticks()/1000
 
 
 
