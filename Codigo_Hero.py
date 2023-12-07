@@ -4,7 +4,7 @@ from Codigo_Bullet import Bala,Flecha
 from Codigo_Auxi import SurfaceManager as sf
 
 class Hero(pygame.sprite.Sprite):
-    def __init__(self,frame_rate, speed_walk, diccionario):
+    def __init__(self,frame_rate, diccionario):
         super().__init__()
         self.__player_config = diccionario.get("estadisticas_hero")
         self.__sprites_config = self.__player_config.get("sprites")
