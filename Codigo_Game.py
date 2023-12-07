@@ -7,13 +7,14 @@ from Codigo_Auxi import get_font
 
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 clock = pygame.time.Clock()
+icon = pygame.image.load('Renders/gema.png')
 class Game:
     def __init__(self, stage_name: str) -> None:
         self.dificultad = stage_name
         self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, self.dificultad)
         pygame.init()
         pygame.display.set_caption("Wizzzard")
-        pygame.display.set_icon(pygame.image.load("Renders/gema.png"))
+        pygame.display.set_icon(pygame.image.load(icon))
         self.volumen = 0
         self.tiempo_transcurrido = 0
         
