@@ -39,8 +39,12 @@ class Game:
             self.game.run(delta_ms)
             #self.game.enemies_hit()
             pygame.display.update()
-            if self.tiempo_transcurrido >= 20:
+            if self.tiempo_transcurrido > 59 and self.tiempo_transcurrido < 120:
                 self.dificultad = "dificultad_2"
+                print(self.dificultad)
+            elif self.tiempo_transcurrido > 120:
+                self.dificultad = "dificultad_3"
+                print(self.dificultad)
 
     def main_menu(self):
         self.game.play_music(self.volumen, "Renders\menu_chill.wav")

@@ -5,8 +5,8 @@ class Fruta(pygame.sprite.Sprite):
     def __init__(self, diccionario, coord_x, coord_y, item: str):
         super().__init__()
         self.__mundo_config = diccionario.get("config_mundo")
-        self.__gema_img = pygame.transform.scale(pygame.image.load(self.__mundo_config["gema"]),(25,25))
-        self.__heart_img = pygame.transform.scale(pygame.image.load(self.__mundo_config["heart"]),(25,25))
+        self.__gema_img = pygame.transform.scale(pygame.image.load(self.__mundo_config["gema"]),(45,45))
+        self.__heart_img = pygame.transform.scale(pygame.image.load(self.__mundo_config["heart"]),(45,45))
 
         self.__rect_gema = self.__gema_img.get_rect()
         self.__rect_hert = self.__heart_img.get_rect()

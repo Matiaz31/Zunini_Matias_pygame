@@ -3,6 +3,7 @@ import random
 from Codigo_Hero import Hero
 from Codigo_Enemys import Zambie,Fantasma
 from Codigo_Fruta import Fruta
+from Codigo_Plataforma import Agujero
 from Codigo_Auxi import (open_configs)
 
 class Stage:
@@ -22,6 +23,9 @@ class Stage:
         self.__main_screen = screen
         self.frutas = pygame.sprite.Group()
         self.fondo = pygame.image.load(self.__mapa_config["fondo"]).convert_alpha()
+        self.fosa = Agujero(self.__configs, 130, 200)
+        self.__is_hitting = False
+        self.__is_inmortal = False
         self.perdiste = False
 
         #self.enemies_hit = False
@@ -31,8 +35,16 @@ class Stage:
         # for enemy in self.enemies_class:
         #     self.enemies.add(enemy)
 
-    def agujeros(self):
-        pass
+    def run(self, delta_ms):
+        self.fosa.update(self.__main_screen)
+        self.frutas.update(self.__main_screen)
+        self.enemies.update(delta_ms, self.__main_screen)
+        self.player_sprite.update(delta_ms, self.__main_screen)
+        #self.player_sprite.draw(self.__main_screen)
+        self.check_colide()
+        #self.__configs.update()
+        print(self.__is_inmortal)
+
 
     def spawnear_enemigos(self, cantidad):
         for _ in range(cantidad):
@@ -54,19 +66,16 @@ class Stage:
                 fantom = Fantasma(100, self.__enemis_config)
                 self.enemies.add(fantom)
 
-    def run(self, delta_ms):
-        self.frutas.update(self.__main_screen)
-        self.enemies.update(delta_ms, self.__main_screen)
-        self.player_sprite.update(delta_ms, self.__main_screen)
-        #self.player_sprite.draw(self.__main_screen)
-        self.check_colide()
-        #self.__configs.update()
 
     def check_colide(self):
         if pygame.sprite.spritecollideany(self.player_sprite, self.enemies):
-            self.player_sprite.vida -= 300
+            self.__is_hitting = True
+            self.chek_hero_life()
+            self.inmortal()
+        else:
+            self.__is_hitting = False
+            self.inmortal()
         if pygame.sprite.spritecollide(self.player_sprite, self.frutas, True):
-            print("ocurrre")
             self.player_sprite.__puntaje += 20
         
         for bullet in self.player_sprite.get_bullets:
@@ -99,6 +108,18 @@ class Stage:
             cantidad = len(self.all_enemies) - len(self.enemies)
             self.create_enemigos(cantidad)
                     
+    def chek_hero_life(self):
+        if not self.__is_inmortal:
+            self.player_sprite.vida -= 100
+            if self.player_sprite.vida <= 0:
+                self.perdiste = True
+    
+    def inmortal(self):
+        if self.__is_hitting:
+            self.__is_inmortal = True
+        if not self.__is_hitting:
+            self.__is_inmortal = False
+
     def check_enemi_death(self):
         for enemi in self.enemies:     
             if enemi.vida <= 0:
