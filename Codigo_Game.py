@@ -23,7 +23,8 @@ class Game:
         self.game.cargar_nuevas_configs(self.dificultad)
         print(self.dificultad)
         self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
-        while True:
+        playing = True
+        while playing:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -31,8 +32,10 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.options()
+                        playing = False
             if self.game.perdiste == True:
                 self.you_lost()
+                playing = False
             
             delta_ms = clock.tick(60)
             pantalla.blit(self.game.fondo, (0,0))
@@ -79,6 +82,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.play()
@@ -96,8 +100,8 @@ class Game:
             pygame.display.update()
 
     def options(self):
-        print("opcions")
-        while True:
+        opciones = True
+        while opciones:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
             pantalla.fill((150,190,190))
@@ -116,45 +120,90 @@ class Game:
                                 text_input="+", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
             VOLUME_MENOS = Button(image=None, pos=(360, 450), 
                                 text_input="-", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+            RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 550), 
+                                text_input="Score's", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
 
-            OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-            OPTIONS_BACK.update(pantalla)
-            MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
-            MEIN_MENU_BUTTON.update(pantalla)
-            VOLUME_MAS.changeColor(OPTIONS_MOUSE_POS)
-            VOLUME_MAS.update(pantalla)
-            VOLUME_MENOS.changeColor(OPTIONS_MOUSE_POS)
-            VOLUME_MENOS.update(pantalla)
+            for button in [OPTIONS_BACK, MEIN_MENU_BUTTON, VOLUME_MAS, VOLUME_MENOS,RANKING]:
+                button.changeColor(OPTIONS_MOUSE_POS)
+                button.update(pantalla)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
                         self.play()
+                        opciones = False
                     if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                         self.main_menu()
+                        opciones = False
                     if VOLUME_MAS.checkForInput(OPTIONS_MOUSE_POS):
                         if self.volumen < 0.9:
                             self.volumen += 0.1
                     if VOLUME_MENOS.checkForInput(OPTIONS_MOUSE_POS):
                         if self.volumen > 0.1:
                             self.volumen -= 0.1
+                    if RANKING.checkForInput(OPTIONS_MOUSE_POS):
+                        self.rankings()
+                        opciones = False
 
             pygame.display.update()
     
     def you_lost(self):
         if self.game.perdiste==True:
             while True:
+                pantalla.blit(self.game.fondo,(0,0))
+                OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+                MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
+                                text_input="Menu", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+                RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 550), 
+                                text_input="Score's", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+                
+                MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
+                MEIN_MENU_BUTTON.update(pantalla)
+                RANKING.changeColor(OPTIONS_MOUSE_POS)
+                RANKING.update(pantalla)
+
                 for evento in pygame.event.get():
                     if evento.type == pygame.QUIT:
                         pygame.quit()
+                        sys.exit()
+                    if evento.type == pygame.MOUSEBUTTONDOWN:
+                        if RANKING.checkForInput(OPTIONS_MOUSE_POS):
+                            self.rankings()
+                        if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
+                            self.main_menu()
 
-                pantalla.blit(self.game.fondo,(0,0))
                 Texto = get_font(150).render("Game Over",True, "Black")
                 pantalla.blit(Texto,(260,170))
 
                 pygame.display.update()
 
     def rankings(self):
-        pass
+        while True:
+            OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+            pantalla.fill((0,0,0))
+
+            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
+                            text_input="Menu", font=get_font(75), base_color="White", hovering_color=(20,120,0))
+            
+            MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
+            MEIN_MENU_BUTTON.update(pantalla)
+
+
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if evento.type == pygame.MOUSEBUTTONDOWN:
+                    if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
+                        self.main_menu()
+
+            Texto = get_font(80).render(f"Score: {self.game.player_sprite.puntaje}",True, "White")
+            pantalla.blit(Texto,(380,170))
+            
+            
+            
+            pygame.display.update()
