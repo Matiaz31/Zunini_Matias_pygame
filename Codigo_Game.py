@@ -8,6 +8,7 @@ from Codigo_Auxi import get_font
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 clock = pygame.time.Clock()
 icon = pygame.image.load('Renders/gema.png')
+
 class Game:
     def __init__(self, stage_name: str) -> None:
         self.dificultad = stage_name
@@ -19,6 +20,7 @@ class Game:
         self.tiempo_transcurrido = 0
         
     def play(self):
+        self.game.cargar_nuevas_configs(self.dificultad)
         print(self.dificultad)
         self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
         while True:
@@ -34,17 +36,21 @@ class Game:
             
             delta_ms = clock.tick(60)
             pantalla.blit(self.game.fondo, (0,0))
-            self.tiempo_transcurrido = pygame.time.get_ticks()//1000
+            self.tiempo_transcurrido = self.game.get_tiempo()
             pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
             self.game.run(delta_ms)
             #self.game.enemies_hit()
             pygame.display.update()
-            if self.tiempo_transcurrido > 59 and self.tiempo_transcurrido < 120:
-                self.dificultad = "dificultad_2"
-                print(self.dificultad)
-            elif self.tiempo_transcurrido > 120:
-                self.dificultad = "dificultad_3"
-                print(self.dificultad)
+            if self.dificultad == "dificultad_1":
+                if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
+                    self.dificultad = "dificultad_2"
+                    print(self.dificultad)
+            else:
+                self.game.cargar_nuevas_configs(self.dificultad)
+                if self.tiempo_transcurrido > 119:
+                    self.dificultad = "dificultad_3"
+                    self.game.cargar_nuevas_configs(self.dificultad)
+                    print(self.dificultad)
 
     def main_menu(self):
         self.game.play_music(self.volumen, "Renders\menu_chill.wav")
@@ -149,3 +155,6 @@ class Game:
                 pantalla.blit(Texto,(260,170))
 
                 pygame.display.update()
+
+    def rankings(self):
+        pass

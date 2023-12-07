@@ -255,3 +255,9 @@ class Fantasma(pygame.sprite.Sprite):
         self.sprite_group.update()
         self.walk()
         self.draw(screen)
+        print(self.vida)
+
+
+class Trampa(pygame.sprite.Sprite):
+    def __init__(self, coord_x, coord_y):
+        super().__init__()

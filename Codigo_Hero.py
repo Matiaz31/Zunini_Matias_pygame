@@ -12,9 +12,8 @@ class Hero(pygame.sprite.Sprite):
         self.vida = self.__player_config["vida"]
         self.nivel = 1
         self.daño_bala = 100* self.nivel
-        self.daño_flecha = 50* self.nivel
-        self.__puntaje = 0
-
+        self.daño_flecha = 7* self.nivel
+        self.puntaje = 0
 
         self.__iddle_l = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1, flip=True)
         self.__iddle_r = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1)
@@ -168,6 +167,8 @@ class Hero(pygame.sprite.Sprite):
         self.do_animation(delta_ms)
         self.__sprite_bullet_group.update()
         self.__sprite_bullet_group.draw(screen)
+        self.__sprite_flecha_group.update()
+        self.__sprite_flecha_group.draw(screen)
         self.draw(screen)
     
     def draw(self, screen: pygame.surface.Surface):
@@ -175,28 +176,28 @@ class Hero(pygame.sprite.Sprite):
         screen.blit(self.__actual_img_animation, self.rect)
 
     def shoot(self,pantalla):
-        if self.shoot_recharge():
+        if self.shoot_recharge_bala():
             self.__bullet_moment = pygame.time.get_ticks()/1000
             for i in range(1,5):
                 self.__sprite_bullet_group.add(self.bala_create(i))
             self.__fire_bullet = False
+
+        if self.shoot_recharge_flecha():
             self.__flecha_moment = pygame.time.get_ticks()/1000
             if self.__is_looking_right:
-                self.__sprite_bullet_group.add(self.flecha_create("Right"))
+                self.__sprite_flecha_group.add(self.flecha_create("Right"))
             else:
-                self.__sprite_bullet_group.add(self.flecha_create("Left"))
+                self.__sprite_flecha_group.add(self.flecha_create("Left"))
 
-    def shoot_recharge(self):
+    def shoot_recharge_bala(self):
         momento = pygame.time.get_ticks()/1000
         if not self.__fire_bullet:
             if momento - self.__bullet_moment >= self.__bala_cooldawn:
                 return True
-        if not self.__fire_flecha:
-            if momento - self.__bullet_moment >= self.__bala_cooldawn:
-                return True
-        if not self.__fire_flecha:
-            if momento - self.__flecha_moment >= self.__flecha_cooldawn:
-                return True
+        return False
+            
+    def shoot_recharge_flecha(self):
+        momento = pygame.time.get_ticks()/1000
         if not self.__fire_flecha:
             if momento - self.__flecha_moment >= self.__flecha_cooldawn:
                 return True

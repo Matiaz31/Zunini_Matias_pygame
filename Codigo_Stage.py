@@ -27,6 +27,7 @@ class Stage:
         self.__is_hitting = False
         self.__is_inmortal = False
         self.perdiste = False
+        self.__tiempo = 0
 
         #self.enemies_hit = False
         self.all_enemies = []
@@ -43,8 +44,17 @@ class Stage:
         #self.player_sprite.draw(self.__main_screen)
         self.check_colide()
         #self.__configs.update()
-        print(self.__is_inmortal)
 
+    def cargar_nuevas_configs(self, dificultad):
+        self.dificultad = dificultad
+        self.__configs = open_configs()
+        self.__mapa_config = self.__configs.get("config_mundo")
+        self.__dificulty_config = self.__configs.get(self.dificultad)
+        self.__enemis_config = self.__dificulty_config.get("enemigos")
+        self.__max_enemies = self.__enemis_config["cantidad"]
+
+    def get_tiempo(self):
+        return pygame.time.get_ticks()//1000
 
     def spawnear_enemigos(self, cantidad):
         for _ in range(cantidad):
@@ -98,8 +108,8 @@ class Stage:
 
             if cantidad_antes > cantidad_despues:
                 cantidad_vencido = cantidad_antes - cantidad_despues
-                self.player_sprite.__puntaje += cantidad_vencido * 60
-                print(f'Puntaje actual: {self.player_sprite.__puntaje} Puntos')
+                self.player_sprite.puntaje += cantidad_vencido * 60
+                print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
             # if len(self.enemies) == 0 and not self.__player_win:
             #     self.__player_win = True
             #     print(f'Ganaste la partida con: {self.player_sprite.__puntaje} Puntos!')

@@ -114,7 +114,7 @@
             "flecha_r": "Renders/flecha_r.png",
             "flecha_l": "Renders/flecha_l.png"
         } ,
-        "vida": 300,
+        "vida": 500,
         "velocidad": 8,
         "cooldawn_bala": 2.5,
         "cooldawn_flecha": 3.5
@@ -125,7 +125,6 @@
         "fosa": "Renders/fosa.png",
         "gema": "Renders/gema.png",
         "heart": "Renders/heart.png"
-
     }
 }
 
