@@ -201,7 +201,6 @@ class Game:
                         if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                             self.main_menu()
                         
-
                 pygame.display.update()
 
     def rankings(self):
@@ -212,14 +211,15 @@ class Game:
             MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
                             text_input="Menu", font=get_font(75), base_color="White", hovering_color=(20,120,0))
             
-            PLAY_AGAIN = Button(image=None, pos=(ANCHO_VENTANA/2, 540), 
+            RETURN = Button(image=None, pos=(ANCHO_VENTANA/2, 460), 
+                                text_input="Return", font=get_font(75), base_color="White", hovering_color=(20,120,0))
+            
+            PLAY_AGAIN = Button(image=None, pos=(ANCHO_VENTANA/2, 520), 
                                 text_input="Play Again", font=get_font(75), base_color="White", hovering_color=(20,120,0))
             
-            MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
-            MEIN_MENU_BUTTON.update(pantalla)
-            PLAY_AGAIN.changeColor(OPTIONS_MOUSE_POS)
-            PLAY_AGAIN.update(pantalla)
-
+            for button in [MEIN_MENU_BUTTON,RETURN,PLAY_AGAIN]:
+                    button.changeColor(OPTIONS_MOUSE_POS)
+                    button.update(pantalla)
 
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
@@ -228,6 +228,8 @@ class Game:
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                         self.main_menu()
+                    if RETURN.checkForInput(OPTIONS_MOUSE_POS):
+                        self.play()
                     if PLAY_AGAIN.checkForInput(OPTIONS_MOUSE_POS):
                         self.iniciar_juego()
                         self.play()
