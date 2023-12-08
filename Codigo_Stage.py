@@ -23,6 +23,7 @@ class Stage:
         self.__limit_h = limit_h
         self.__main_screen = screen
         self.frutas = pygame.sprite.Group()
+        self.coras = pygame.sprite.Group()
         self.fondo = pygame.image.load(self.__mapa_config["fondo"]).convert_alpha()
         self.__is_hitting = False
         self.__is_inmortal = False
@@ -40,6 +41,7 @@ class Stage:
         self.check_colide()
         self.fosa.update(self.__main_screen)
         self.frutas.update(self.__main_screen)
+        self.coras.update(self.__main_screen)
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
         #self.player_sprite.draw(self.__main_screen)
@@ -86,9 +88,15 @@ class Stage:
             self.inmortal()
         for fruta in self.frutas:
             if pygame.sprite.collide_rect(fruta, self.player_sprite):
-                print(fruta)
                 fruta.kill()
-                self.player_sprite.puntaje += 20
+                self.player_sprite.puntaje += 10
+        for cora in self.coras:
+            if pygame.sprite.collide_rect(cora, self.player_sprite):
+                cora.kill()
+                if self.player_sprite.vida == 500:
+                    self.player_sprite.puntaje += 140
+                else:
+                    self.player_sprite.vida += 100
         
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)
@@ -110,7 +118,7 @@ class Stage:
 
             if cantidad_antes > cantidad_despues:
                 cantidad_vencido = cantidad_antes - cantidad_despues
-                self.player_sprite.puntaje += cantidad_vencido * 60
+                self.player_sprite.puntaje += cantidad_vencido * 50
                 print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
             # if len(self.enemies) == 0 and not self.__player_win:
             #     self.__player_win = True
@@ -142,7 +150,7 @@ class Stage:
                 if rand <= 21:
                     self.frutas.add(Fruta(self.__configs,pos_x,pos_y, "gema"))
                 else:
-                    self.frutas.add(Fruta(self.__configs,pos_x,pos_y, "heart"))
+                    self.coras.add(Fruta(self.__configs,pos_x,pos_y, "heart"))
                 enemi.kill()
 
     
