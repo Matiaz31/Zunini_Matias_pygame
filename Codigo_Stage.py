@@ -37,12 +37,12 @@ class Stage:
         #     self.enemies.add(enemy)
 
     def run(self, delta_ms):
+        self.check_colide()
         self.fosa.update(self.__main_screen)
         self.frutas.update(self.__main_screen)
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
         #self.player_sprite.draw(self.__main_screen)
-        self.check_colide()
         #self.__configs.update()
 
     def cargar_nuevas_configs(self, dificultad):
@@ -84,8 +84,11 @@ class Stage:
         else:
             self.__is_hitting = False
             self.inmortal()
-        if pygame.sprite.spritecollide(self.player_sprite, self.frutas, True):
-            self.player_sprite.puntaje += 20
+        for fruta in self.frutas:
+            if pygame.sprite.collide_rect(fruta, self.player_sprite):
+                print(fruta)
+                fruta.kill()
+                self.player_sprite.puntaje += 20
         
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)

@@ -152,7 +152,6 @@ class Zambie(pygame.sprite.Sprite):
         self.do_animation(delta_ms)
         self.sprite_group.update()
         self.draw(screen)
-        print(self.vida)
 
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]

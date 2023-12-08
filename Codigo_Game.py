@@ -160,8 +160,14 @@ class Game:
             pantalla.blit(self.game.fondo, (0,0))
             self.tiempo_transcurrido = self.game.get_tiempo()
             pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
+            vida = self.game.player_sprite.vida
+            cord = 10
+            for _ in range(vida//100):
+                pantalla.blit(pygame.image.load("Renders\heart.png"),(cord, 40))
+                cord += 20
+
+
             self.game.run(delta_ms)
-            #self.game.enemies_hit()
             pygame.display.update()
             if self.dificultad == "dificultad_1":
                 if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
