@@ -18,42 +18,6 @@ class Game:
         pygame.display.set_icon(icon)
         self.volumen = 0
         self.tiempo_transcurrido = 0
-        
-    def play(self):
-        self.game.cargar_nuevas_configs(self.dificultad)
-        print(self.dificultad)
-        self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
-        playing = True
-        while playing:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.options()
-                        playing = False
-            if self.game.perdiste == True:
-                self.you_lost()
-                playing = False
-            
-            delta_ms = clock.tick(60)
-            pantalla.blit(self.game.fondo, (0,0))
-            self.tiempo_transcurrido = self.game.get_tiempo()
-            pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
-            self.game.run(delta_ms)
-            #self.game.enemies_hit()
-            pygame.display.update()
-            if self.dificultad == "dificultad_1":
-                if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
-                    self.dificultad = "dificultad_2"
-                    print(self.dificultad)
-            else:
-                self.game.cargar_nuevas_configs(self.dificultad)
-                if self.tiempo_transcurrido > 119:
-                    self.dificultad = "dificultad_3"
-                    self.game.cargar_nuevas_configs(self.dificultad)
-                    print(self.dificultad)
 
     def main_menu(self):
         self.game.play_music(self.volumen, "Renders\menu_chill.wav")
@@ -106,24 +70,37 @@ class Game:
 
             pantalla.fill((150,190,190))
 
-            OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-            OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_VENTANA/2, 260))
+            OPTIONS_TEXT = get_font(45).render("Estas en la Pantalla de opciones", True, "Black")
+            OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_VENTANA/2, 160))
             pantalla.blit(OPTIONS_TEXT, OPTIONS_RECT)
             VOLUMEN_TXT = get_font(75).render(f"Volumen: {round(self.volumen,1)}", True, "Black")
-            pantalla.blit(VOLUMEN_TXT,(380,430))
+            pantalla.blit(VOLUMEN_TXT,(380,330))
 
-            OPTIONS_BACK = Button(image=None, pos=(ANCHO_VENTANA/2, 350), 
+            OPTIONS_BACK = Button(image=None, pos=(ANCHO_VENTANA/2, 250), 
                                 text_input="Play", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
-            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
+            
+            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 300), 
                                 text_input="Menu", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
-            VOLUME_MAS = Button(image=None, pos=(ANCHO_VENTANA/1.5, 450), 
+            
+            VOLUME_MAS = Button(image=None, pos=(ANCHO_VENTANA/1.5, 350), 
                                 text_input="+", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
-            VOLUME_MENOS = Button(image=None, pos=(360, 450), 
+            
+            VOLUME_MENOS = Button(image=None, pos=(360, 350), 
                                 text_input="-", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
-            RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 550), 
-                                text_input="Score's", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+            
+            RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 450), 
+                                text_input="Score", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+            
+            DIFICULTY_1 = Button(image=None, pos=(200, 530), 
+                                text_input="Dificultad Facil", font=get_font(65), base_color="Black", hovering_color=(20,120,0))
+            
+            DIFICULTY_2 = Button(image=None, pos=(550, 530), 
+                                text_input="Dificultad Media", font=get_font(65), base_color="Black", hovering_color=(20,120,0))
+            
+            DIFICULTY_3 = Button(image=None, pos=(900, 530), 
+                                text_input="Dificultar Alta", font=get_font(65), base_color="Black", hovering_color=(20,120,0))
 
-            for button in [OPTIONS_BACK, MEIN_MENU_BUTTON, VOLUME_MAS, VOLUME_MENOS,RANKING]:
+            for button in [OPTIONS_BACK,MEIN_MENU_BUTTON,VOLUME_MAS,VOLUME_MENOS,RANKING,DIFICULTY_1,DIFICULTY_2,DIFICULTY_3]:
                 button.changeColor(OPTIONS_MOUSE_POS)
                 button.update(pantalla)
 
@@ -147,9 +124,51 @@ class Game:
                     if RANKING.checkForInput(OPTIONS_MOUSE_POS):
                         self.rankings()
                         opciones = False
+                    if DIFICULTY_2.checkForInput(OPTIONS_MOUSE_POS):
+                        self.dificultad = "dificultad_2"
+                        print("cambios updateados")
+                    if DIFICULTY_3.checkForInput(OPTIONS_MOUSE_POS):
+                        self.dificultad = "dificultad_3"
+                        print("cambios updateados")
 
             pygame.display.update()
     
+    def play(self):
+            self.game.cargar_nuevas_configs(self.dificultad)
+            print(self.dificultad)
+            self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
+            playing = True
+            while playing:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            self.options()
+                            playing = False
+                if self.game.perdiste == True:
+                    self.you_lost()
+                    playing = False
+                
+                delta_ms = clock.tick(60)
+                pantalla.blit(self.game.fondo, (0,0))
+                self.tiempo_transcurrido = self.game.get_tiempo()
+                pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
+                self.game.run(delta_ms)
+                #self.game.enemies_hit()
+                pygame.display.update()
+                if self.dificultad == "dificultad_1":
+                    if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
+                        self.dificultad = "dificultad_2"
+                        print(self.dificultad)
+                else:
+                    self.game.cargar_nuevas_configs(self.dificultad)
+                    if self.tiempo_transcurrido > 119:
+                        self.dificultad = "dificultad_3"
+                        self.game.cargar_nuevas_configs(self.dificultad)
+                        print(self.dificultad)
+
     def you_lost(self):
         if self.game.perdiste==True:
             while True:

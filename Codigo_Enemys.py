@@ -154,6 +154,7 @@ class Zambie(pygame.sprite.Sprite):
         self.do_animation(delta_ms)
         self.sprite_group.update()
         self.draw(screen)
+        print(self.vida)
 
     def draw(self, screen: pygame.surface.Surface):
         self.__actual_img_animation = self.__actual_animation[self.__actual_frame]
@@ -255,8 +256,6 @@ class Fantasma(pygame.sprite.Sprite):
         self.sprite_group.update()
         self.walk()
         self.draw(screen)
-        print(self.vida)
-
 
 class Trampa(pygame.sprite.Sprite):
     def __init__(self, coord_x, coord_y):
