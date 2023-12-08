@@ -44,7 +44,7 @@
                     "muerte": "Renders/zambie_death.png"
                 } ,
                 "vida": 200,
-                "velocidad_min": 5,
+                "velocidad_min": 6,
                 "velocidad_max": 9
             },
             "fantom":{
@@ -63,7 +63,7 @@
                     "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 100,
-                "velocidad_min": 5,
+                "velocidad_min": 6,
                 "velocidad_max": 9
             },
             "cantidad": 13
@@ -79,7 +79,7 @@
                     "muerte": "Renders/zambie_death.png"
                 } ,
                 "vida": 300,
-                "velocidad_min": 6,
+                "velocidad_min": 7,
                 "velocidad_max": 10
             },
             "fantom":{
@@ -88,7 +88,7 @@
                     "muerte": "Renders/fantasma_muerte.png"
                 } ,
                 "vida": 200,
-                "velocidad_min": 6,
+                "velocidad_min": 7,
                 "velocidad_max": 10
             },
             "murciegalo":{
@@ -98,7 +98,7 @@
                     "bala":"Renders/evil_ball.png"
                 } ,
                 "vida": 150,
-                "velocidad_min": 6,
+                "velocidad_min": 7,
                 "velocidad_max": 10
             },
             "cantidad": 16

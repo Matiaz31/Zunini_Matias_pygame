@@ -57,10 +57,10 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.play()
-                        menu = False
+                        self.menu = False
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.options()
-                        menu = False
+                        self.menu = False
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         sys.exit()
 
@@ -114,10 +114,10 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
                         self.play()
-                        opciones = False
+                        self.opciones = False
                     if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                         self.main_menu()
-                        opciones = False
+                        self.opciones = False
                     if VOLUME_MAS.checkForInput(OPTIONS_MOUSE_POS):
                         if self.volumen < 0.9:
                             self.volumen += 0.1
@@ -126,7 +126,7 @@ class Game:
                             self.volumen -= 0.1
                     if RANKING.checkForInput(OPTIONS_MOUSE_POS):
                         self.rankings()
-                        opciones = False
+                        self.opciones = False
                     if DIFICULTY_2.checkForInput(OPTIONS_MOUSE_POS):
                         self.dificultad = "dificultad_2"
                         print("cambios updateados")
@@ -140,7 +140,6 @@ class Game:
         if not self.opciones:
             self.iniciar_juego()
         self.game.cargar_nuevas_configs(self.dificultad)
-        print(self.dificultad)
         play_music(self.volumen,0, "Renders\Arabesque.mp3")
         playing = True
         while playing:
@@ -191,7 +190,7 @@ class Game:
                 MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
                                 text_input="Menu", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
                 RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 470), 
-                                text_input="Score's", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+                                text_input="Score", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
                 
                 for button in [MEIN_MENU_BUTTON,RANKING]:
                     button.changeColor(OPTIONS_MOUSE_POS)
@@ -245,9 +244,6 @@ class Game:
             except Exception:
                 pass
 
-            
-            
-            
             pygame.display.update()
 
     def iniciar_juego(self):

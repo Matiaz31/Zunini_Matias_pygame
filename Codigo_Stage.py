@@ -38,6 +38,8 @@ class Stage:
         #     self.enemies.add(enemy)
 
     def run(self, delta_ms):
+        print(self.all_enemies)
+        print(len(self.all_enemies))
         self.check_colide()
         self.fosa.update(self.__main_screen)
         self.frutas.update(self.__main_screen)
