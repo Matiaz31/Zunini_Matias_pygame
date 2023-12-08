@@ -3,27 +3,30 @@ import sys
 from Codigo_Button import Button
 from Codigo_Stage import Stage
 from Codigo_Assets import ANCHO_VENTANA, ALTO_VENTANA
-from Codigo_Auxi import get_font
+from Codigo_Auxi import get_font, play_music
 
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 clock = pygame.time.Clock()
 icon = pygame.image.load('Renders/gema.png')
+fondo_menu = pygame.image.load("Renders/fondo.png")
 
 class Game:
     def __init__(self, stage_name: str) -> None:
         self.dificultad = stage_name
-        self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, self.dificultad)
         pygame.init()
         pygame.display.set_caption("Wizzzard")
         pygame.display.set_icon(icon)
         self.volumen = 0
         self.tiempo_transcurrido = 0
+        self.opciones = False
+        self.menu = False
+
 
     def main_menu(self):
-        self.game.play_music(self.volumen, "Renders\menu_chill.wav")
-        menu = True
-        while menu:
-            pantalla.blit(self.game.fondo, (0, 0))
+        play_music(self.volumen, 0, "Renders\menu_chill.wav")
+        self.menu = True
+        while self.menu:
+            pantalla.blit(fondo_menu, (0, 0))
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -64,8 +67,8 @@ class Game:
             pygame.display.update()
 
     def options(self):
-        opciones = True
-        while opciones:
+        self.opciones = True
+        while self.opciones:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
             pantalla.fill((150,190,190))
@@ -133,57 +136,60 @@ class Game:
 
             pygame.display.update()
     
-    def play(self):
-            self.game.cargar_nuevas_configs(self.dificultad)
-            print(self.dificultad)
-            self.game.play_music(self.volumen, "Renders\Arabesque.mp3")
-            playing = True
-            while playing:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_ESCAPE:
-                            self.options()
-                            playing = False
-                if self.game.perdiste == True:
-                    self.you_lost()
-                    playing = False
-                
-                delta_ms = clock.tick(60)
-                pantalla.blit(self.game.fondo, (0,0))
-                self.tiempo_transcurrido = self.game.get_tiempo()
-                pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
-                self.game.run(delta_ms)
-                #self.game.enemies_hit()
-                pygame.display.update()
-                if self.dificultad == "dificultad_1":
-                    if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
-                        self.dificultad = "dificultad_2"
-                        print(self.dificultad)
-                else:
+    def play(self):  
+        if not self.opciones:
+            self.iniciar_juego()
+        self.game.cargar_nuevas_configs(self.dificultad)
+        print(self.dificultad)
+        play_music(self.volumen,0, "Renders\Arabesque.mp3")
+        playing = True
+        while playing:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.options()
+                        playing = False
+            if self.game.perdiste == True:
+                self.you_lost()
+                playing = False
+            
+            delta_ms = clock.tick(60)
+            pantalla.blit(self.game.fondo, (0,0))
+            self.tiempo_transcurrido = self.game.get_tiempo()
+            pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
+            self.game.run(delta_ms)
+            #self.game.enemies_hit()
+            pygame.display.update()
+            if self.dificultad == "dificultad_1":
+                if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
+                    self.dificultad = "dificultad_2"
+                    print(self.dificultad)
+            else:
+                self.game.cargar_nuevas_configs(self.dificultad)
+                if self.tiempo_transcurrido > 119:
+                    self.dificultad = "dificultad_3"
                     self.game.cargar_nuevas_configs(self.dificultad)
-                    if self.tiempo_transcurrido > 119:
-                        self.dificultad = "dificultad_3"
-                        self.game.cargar_nuevas_configs(self.dificultad)
-                        print(self.dificultad)
+                    print(self.dificultad)
 
     def you_lost(self):
         if self.game.perdiste==True:
             while True:
                 pantalla.blit(self.game.fondo,(0,0))
                 OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+                Texto = get_font(150).render("Game Over",True, "Black")
+                pantalla.blit(Texto,(260,170))
 
                 MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
                                 text_input="Menu", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
-                RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 550), 
+                RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 470), 
                                 text_input="Score's", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
                 
-                MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
-                MEIN_MENU_BUTTON.update(pantalla)
-                RANKING.changeColor(OPTIONS_MOUSE_POS)
-                RANKING.update(pantalla)
+                for button in [MEIN_MENU_BUTTON,RANKING]:
+                    button.changeColor(OPTIONS_MOUSE_POS)
+                    button.update(pantalla)
 
                 for evento in pygame.event.get():
                     if evento.type == pygame.QUIT:
@@ -194,9 +200,7 @@ class Game:
                             self.rankings()
                         if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                             self.main_menu()
-
-                Texto = get_font(150).render("Game Over",True, "Black")
-                pantalla.blit(Texto,(260,170))
+                        
 
                 pygame.display.update()
 
@@ -208,8 +212,13 @@ class Game:
             MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
                             text_input="Menu", font=get_font(75), base_color="White", hovering_color=(20,120,0))
             
+            PLAY_AGAIN = Button(image=None, pos=(ANCHO_VENTANA/2, 540), 
+                                text_input="Play Again", font=get_font(75), base_color="White", hovering_color=(20,120,0))
+            
             MEIN_MENU_BUTTON.changeColor(OPTIONS_MOUSE_POS)
             MEIN_MENU_BUTTON.update(pantalla)
+            PLAY_AGAIN.changeColor(OPTIONS_MOUSE_POS)
+            PLAY_AGAIN.update(pantalla)
 
 
             for evento in pygame.event.get():
@@ -219,10 +228,19 @@ class Game:
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                         self.main_menu()
+                    if PLAY_AGAIN.checkForInput(OPTIONS_MOUSE_POS):
+                        self.iniciar_juego()
+                        self.play()
+            try:
+                Texto = get_font(80).render(f"Score: {self.game.player_sprite.puntaje}",True, "White")
+                pantalla.blit(Texto,(380,170))
+            except Exception:
+                pass
 
-            Texto = get_font(80).render(f"Score: {self.game.player_sprite.puntaje}",True, "White")
-            pantalla.blit(Texto,(380,170))
             
             
             
             pygame.display.update()
+
+    def iniciar_juego(self):
+        self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, self.dificultad)

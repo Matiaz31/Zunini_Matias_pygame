@@ -35,3 +35,9 @@ def get_font(size):
 def open_configs() -> dict:
     with open("Json_data.json", "r", encoding="utf-8") as config:
         return json.load(config)
+    
+def play_music(self, volumen, que):
+    volumen += 0
+    pygame.mixer.music.load(que)
+    pygame.mixer.music.set_volume(volumen)
+    pygame.mixer.music.play()

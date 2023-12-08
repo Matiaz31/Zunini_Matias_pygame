@@ -4,7 +4,7 @@ from Codigo_Hero import Hero
 from Codigo_Enemys import Zambie,Fantasma
 from Codigo_Fruta import Fruta
 from Codigo_Plataforma import Agujero
-from Codigo_Auxi import (open_configs)
+from Codigo_Auxi import (open_configs, play_music)
 
 class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
@@ -59,7 +59,7 @@ class Stage:
     def spawnear_enemigos(self, cantidad):
         for _ in range(cantidad):
             zambie = Zambie(100,self.player_sprite.rect, self.__enemis_config)
-            fantom = Fantasma(100, self.__enemis_config)
+            fantom = Fantasma(100,self.player_sprite.rect, self.__enemis_config)
 
             self.enemies.add(fantom)
             self.enemies.add(zambie)
@@ -73,9 +73,8 @@ class Stage:
                 zambie = Zambie(100,self.player_sprite.rect, self.__enemis_config)
                 self.enemies.add(zambie)
             else:
-                fantom = Fantasma(100, self.__enemis_config)
+                fantom = Fantasma(100,self.player_sprite.rect, self.__enemis_config)
                 self.enemies.add(fantom)
-
 
     def check_colide(self):
         if pygame.sprite.spritecollideany(self.player_sprite, self.enemies):
@@ -86,7 +85,7 @@ class Stage:
             self.__is_hitting = False
             self.inmortal()
         if pygame.sprite.spritecollide(self.player_sprite, self.frutas, True):
-            self.player_sprite.__puntaje += 20
+            self.player_sprite.puntaje += 20
         
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)
@@ -133,14 +132,10 @@ class Stage:
     def check_enemi_death(self):
         for enemi in self.enemies:     
             if enemi.vida <= 0:
+                self.player_sprite.puntaje += 130
                 pos_x = enemi.rect.x
                 pos_y = enemi.rect.y
                 self.frutas.add(Fruta(self.__configs,pos_x,pos_y, "gema"))
                 enemi.kill()
 
-    def play_music(self, volumen, que):
-        volumen += 0
-        pygame.mixer.music.load(que)
-        pygame.mixer.music.set_volume(volumen)
-        pygame.mixer.music.play()
     
