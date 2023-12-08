@@ -9,7 +9,8 @@ from Codigo_Auxi import (open_configs, play_music)
 class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
         self.__configs = open_configs()
-        self.player_sprite = Hero(50,self.__configs)
+        self.fosa = Agujero(self.__configs, 130, 200)
+        self.player_sprite = Hero(50,self.__configs, self.fosa.get_rect())
         self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
         self.dificultad = dificultad
@@ -23,7 +24,6 @@ class Stage:
         self.__main_screen = screen
         self.frutas = pygame.sprite.Group()
         self.fondo = pygame.image.load(self.__mapa_config["fondo"]).convert_alpha()
-        self.fosa = Agujero(self.__configs, 130, 200)
         self.__is_hitting = False
         self.__is_inmortal = False
         self.perdiste = False
@@ -135,7 +135,11 @@ class Stage:
                 self.player_sprite.puntaje += 130
                 pos_x = enemi.rect.x
                 pos_y = enemi.rect.y
-                self.frutas.add(Fruta(self.__configs,pos_x,pos_y, "gema"))
+                rand = random.randint(1,23)
+                if rand <= 21:
+                    self.frutas.add(Fruta(self.__configs,pos_x,pos_y, "gema"))
+                else:
+                    self.frutas.add(Fruta(self.__configs,pos_x,pos_y, "heart"))
                 enemi.kill()
 
     

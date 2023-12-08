@@ -17,3 +17,6 @@ class Agujero(pygame.sprite.Sprite):
 
     def update(self, screen: pygame.surface.Surface):
         self.draw(screen)
+
+    def get_rect(self):
+        return self.__fosa_rect
