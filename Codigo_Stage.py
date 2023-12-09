@@ -1,7 +1,7 @@
 import pygame
 import random
 from Codigo_Hero import Hero
-from Codigo_Enemys import Zambie,Fantasma
+from Codigo_Enemys import Zambie,Fantasma,Trampa
 from Codigo_Fruta import Fruta
 from Codigo_Plataforma import Agujero
 from Codigo_Auxi import (open_configs, play_music)
@@ -17,7 +17,8 @@ class Stage:
         self.__mapa_config = self.__configs.get("config_mundo")
         self.__dificulty_config = self.__configs.get(self.dificultad)
         self.__enemis_config = self.__dificulty_config.get("enemigos")
-        self.__max_enemies = self.__enemis_config["cantidad"]
+        self.__max_enemies = self.__enemis_config["cantidad_e"]
+        self.__max_trampas = self.__enemis_config["cantidad_t"]
         self.__player_win = False
         self.__limit_w = limit_w
         self.__limit_h = limit_h
@@ -29,21 +30,19 @@ class Stage:
         self.__is_inmortal = False
         self.perdiste = False
         self.__tiempo = 0
+        self.trampas = pygame.sprite.Group()
 
-        #self.enemies_hit = False
-        self.all_enemies = []
+        self.__all_enemies = []
+        self.__all_trampas = []
         self.spawnear_enemigos(self.__max_enemies)
-
-        # for enemy in self.enemies_class:
-        #     self.enemies.add(enemy)
+        self.spawnear_trampas(self.__max_trampas)
 
     def run(self, delta_ms):
-        print(self.all_enemies)
-        print(len(self.all_enemies))
         self.check_colide()
         self.fosa.update(self.__main_screen)
         self.frutas.update(self.__main_screen)
         self.coras.update(self.__main_screen)
+        self.trampas.update(self.__main_screen)
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
         #self.player_sprite.draw(self.__main_screen)
@@ -55,7 +54,8 @@ class Stage:
         self.__mapa_config = self.__configs.get("config_mundo")
         self.__dificulty_config = self.__configs.get(self.dificultad)
         self.__enemis_config = self.__dificulty_config.get("enemigos")
-        self.__max_enemies = self.__enemis_config["cantidad"]
+        self.__max_enemies = self.__enemis_config["cantidad_e"]
+        self.__max_trampas = self.__enemis_config["cantidad_t"]
 
     def get_tiempo(self):
         return pygame.time.get_ticks()//1000
@@ -65,10 +65,14 @@ class Stage:
             zambie = Zambie(100,self.player_sprite.rect, self.__enemis_config)
             fantom = Fantasma(100,self.player_sprite.rect, self.__enemis_config)
 
-            self.enemies.add(fantom)
-            self.enemies.add(zambie)
-            self.all_enemies.append(fantom)
-            self.all_enemies.append(zambie)
+            self.__all_enemies.append(fantom)
+            self.__all_enemies.append(zambie)
+
+    def spawnear_trampas(self, cantidad_trampas):
+        for _ in range(cantidad_trampas):
+            trampa = Trampa(self.player_sprite.rect, self.__mapa_config)
+            self.__all_trampas.append(trampa)
+            self.trampas.add(trampa)
 
     def create_enemigos(self, cantidad):
         for _ in range(cantidad):
@@ -80,18 +84,27 @@ class Stage:
                 fantom = Fantasma(100,self.player_sprite.rect, self.__enemis_config)
                 self.enemies.add(fantom)
 
+    def create_trampas(self, cantidad_trampas):
+        for _ in range(cantidad_trampas):
+            trampa = Trampa(self.player_sprite.rect, self.__mapa_config)
+            self.trampas.add(trampa)
+
+
+
     def check_colide(self):
         if pygame.sprite.spritecollideany(self.player_sprite, self.enemies):
             self.__is_hitting = True
-            self.chek_hero_life()
+            self.chek_hero_life(100)
             self.inmortal()
         else:
             self.__is_hitting = False
             self.inmortal()
+
         for fruta in self.frutas:
             if pygame.sprite.collide_rect(fruta, self.player_sprite):
                 fruta.kill()
                 self.player_sprite.puntaje += 10
+
         for cora in self.coras:
             if pygame.sprite.collide_rect(cora, self.player_sprite):
                 cora.kill()
@@ -99,6 +112,12 @@ class Stage:
                     self.player_sprite.puntaje += 140
                 else:
                     self.player_sprite.vida += 100
+
+        for trampa in self.trampas:
+            if pygame.sprite.collide_rect(trampa, self.player_sprite):
+                trampa.kill()
+                self.chek_hero_life(200)
+
         
         for bullet in self.player_sprite.get_bullets:
             cantidad_antes = len(self.enemies)
@@ -126,13 +145,18 @@ class Stage:
             #     self.__player_win = True
             #     print(f'Ganaste la partida con: {self.player_sprite.__puntaje} Puntos!')
 
-        if len(self.enemies) < len(self.all_enemies):
-            cantidad = len(self.all_enemies) - len(self.enemies)
-            self.create_enemigos(cantidad)
+        if len(self.enemies) < len(self.__all_enemies):
+            cantidad_e = len(self.__all_enemies) - len(self.enemies)
+            self.create_enemigos(cantidad_e)
+
+        if len(self.trampas) < len(self.__all_trampas):
+            cantidad_t = len(self.__all_trampas) - len(self.trampas)
+            self.create_trampas(cantidad_t)
                     
-    def chek_hero_life(self):
+
+    def chek_hero_life(self, dano: int):
         if not self.__is_inmortal:
-            self.player_sprite.vida -= 100
+            self.player_sprite.vida -= dano
             if self.player_sprite.vida <= 0:
                 self.perdiste = True
     

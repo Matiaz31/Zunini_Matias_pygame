@@ -188,11 +188,13 @@ class Game:
                 pantalla.blit(Texto,(260,170))
 
                 MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
-                                text_input="Menu", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+                                text_input="Menu", font=get_font(80), base_color="Black", hovering_color=(20,120,0))
                 RANKING = Button(image=None, pos=(ANCHO_VENTANA/2, 470), 
-                                text_input="Score", font=get_font(75), base_color="Black", hovering_color=(20,120,0))
+                                text_input="Score", font=get_font(80), base_color="Black", hovering_color=(20,120,0))
+                PLAY_AGAIN = Button(image=None, pos=(ANCHO_VENTANA/2, 540), 
+                                text_input="Play Again", font=get_font(80), base_color="Black", hovering_color=(20,120,0))
                 
-                for button in [MEIN_MENU_BUTTON,RANKING]:
+                for button in [MEIN_MENU_BUTTON,RANKING,PLAY_AGAIN]:
                     button.changeColor(OPTIONS_MOUSE_POS)
                     button.update(pantalla)
 
@@ -205,6 +207,9 @@ class Game:
                             self.rankings()
                         if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
                             self.main_menu()
+                        if PLAY_AGAIN.checkForInput(OPTIONS_MOUSE_POS):
+                            self.iniciar_juego()
+                            self.play()
                         
                 pygame.display.update()
 

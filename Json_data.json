@@ -31,7 +31,8 @@
                 "velocidad_min": 4,
                 "velocidad_max": 7
             },
-            "cantidad": 10
+            "cantidad_e": 10,
+            "cantidad_t": 2
         }
     },
     "dificultad_2":
@@ -66,7 +67,8 @@
                 "velocidad_min": 6,
                 "velocidad_max": 9
             },
-            "cantidad": 13
+            "cantidad_e": 13,
+            "cantidad_t": 2
         }
     },
     "dificultad_3":
@@ -101,7 +103,8 @@
                 "velocidad_min": 7,
                 "velocidad_max": 10
             },
-            "cantidad": 16
+            "cantidad_e": 16,
+            "cantidad_t": 3
         }
     },
     "estadisticas_hero":
@@ -124,7 +127,8 @@
         "fondo":"Renders/fondo.png",
         "fosa": "Renders/fosa.png",
         "gema": "Renders/gema.png",
-        "heart": "Renders/heart.png"
+        "heart": "Renders/heart.png",
+        "trampa": "Renders/trampa.png"
     }
 }
 
