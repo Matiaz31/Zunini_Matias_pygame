@@ -218,16 +218,19 @@ class Hero(pygame.sprite.Sprite):
             return Flecha(self.rect.centerx,self.rect.centery,  self.__flecha_img_l, direccion)
 
     def level_up(self):
-        if self.nivel < 4:
+        if self.nivel < 3:
             if self.exp >= 100:
+                self.nivel += 1
                 self.exp = 0
                 return True
-        elif self.nivel < 7:
+        elif self.nivel < 6:
             if self.exp >= 150:
+                self.nivel += 1
                 self.exp = 0
                 return True
         elif self.nivel > 6:
-            if self.exp >= 200:
+            if self.exp >= 150:
+                self.nivel += 1
                 self.exp = 0
                 return True
         return False

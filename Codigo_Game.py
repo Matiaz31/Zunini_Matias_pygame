@@ -307,7 +307,12 @@ class Game:
                 print(self.dificultad)
         else:
             self.game.cargar_nuevas_configs(self.dificultad)
-            if self.tiempo_transcurrido > 119 and self.tiempo_transcurrido < 200:
+            if self.tiempo_transcurrido > 119 and self.tiempo_transcurrido < 201:
+                self.dificultad = "dificultad_3"
+                self.game.cargar_nuevas_configs(self.dificultad)
+                print(self.dificultad)
+            if self.tiempo_transcurrido > 200:
                 self.dificultad = "dificultad_4"
                 self.game.cargar_nuevas_configs(self.dificultad)
                 print(self.dificultad)
+                
