@@ -221,15 +221,15 @@ class Hero(pygame.sprite.Sprite):
         if self.nivel < 4:
             if self.exp >= 100:
                 self.exp = 0
-            return True
+                return True
         elif self.nivel < 7:
             if self.exp >= 150:
                 self.exp = 0
-            return True
+                return True
         elif self.nivel > 6:
             if self.exp >= 200:
                 self.exp = 0
-            return True
+                return True
         return False
 
     

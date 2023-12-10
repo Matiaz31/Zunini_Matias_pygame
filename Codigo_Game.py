@@ -272,7 +272,7 @@ class Game:
             UPGRADE_2 = Button(image=pygame.image.load("Renders\carta.png"), pos=(decimo*5, ALTO_VENTANA/2), 
                                 text_input="+ vida", font=get_font(45), base_color="White", hovering_color=(20,30,0))
             
-            UPGRADE_3 = Button(image=pygame.image.load("Renders\carta.png"), pos=(decimo*7, ALTO_VENTANA/2), 
+            UPGRADE_3 = Button(image=pygame.image.load("Renders\carta.png"), pos=(decimo*8, ALTO_VENTANA/2), 
                                 text_input="+ daño", font=get_font(45), base_color="White", hovering_color=(20,30,0))
             
             for button in [UPGRADE_1,UPGRADE_2,UPGRADE_3]:
