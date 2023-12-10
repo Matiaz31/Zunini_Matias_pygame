@@ -183,26 +183,23 @@ class Fantasma(pygame.sprite.Sprite):
         self.__is_looking_right = True
 
         self.__hero_rect = hero_rect
-        self.__hero_x_1 = self.__hero_rect.centerx - 100
-        self.__hero_y_1 = self.__hero_rect.centery - 100
-        self.__hero_x_2 = self.__hero_rect.centerx + 100
-        self.__hero_y_2 = self.__hero_rect.centery + 100
 
         self.rect = self.__actual_img_animation.get_rect()
-        self.x = random.randint(0,ANCHO_VENTANA)
-        if self.x > self.__hero_x_1 and self.x < self.__hero_x_2:
-            pass
+        self.x = random.randint(10,ANCHO_VENTANA)
+        if self.x > self.__hero_rect.centerx - 100 and self.x < self.__hero_rect.centerx + 100:
+            self.x = random.randint(0,ANCHO_VENTANA)
         else:
             self.rect.x = self.x
-        self.y = random.randint(0,ALTO_VENTANA)
-        if self.y > self.__hero_y_1 and self.y < self.__hero_y_2:
-            pass
+
+        self.y = random.randint(10,ALTO_VENTANA)
+        if self.y > self.__hero_rect.centery - 100 and self.y < self.__hero_rect.centery + 100:
+            self.y = random.randint(0,ALTO_VENTANA)
         else:
             self.rect.y = self.y
 
         self.sprite_group = pygame.sprite.Group()
         self.vida = self.__config["vida"]
-        self.__is_alive = True
+        self.is_alive = True
 
     def __set_borders_limits_x(self):
         pixels_move = 0
@@ -274,7 +271,7 @@ class Fantasma(pygame.sprite.Sprite):
         self.draw(screen)
 
 class Trampa(pygame.sprite.Sprite):
-    def __init__(self, hero_rect , diccionario):
+    def __init__(self, hero_rect , diccionario, momento):
         super().__init__()
         self.__mundo_config = diccionario
         self.__trampa_img = pygame.transform.scale(pygame.image.load(self.__mundo_config["trampa"]),(35,35))
@@ -297,9 +294,36 @@ class Trampa(pygame.sprite.Sprite):
             pass
         else:
             self.rect.y = self.y
+
+        self.__spawn_moment = momento
+        self.spawn_trap = True
     
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.__trampa_img, self.rect)
 
     def update(self, screen: pygame.surface.Surface):
+        self.recolocar_trampas()
         self.draw(screen)
+
+    def recolocar_trampas(self):
+        if self.recharge_traps():
+            self.x = random.randint(0,ANCHO_VENTANA)
+            if self.x > self.__hero_x_1 and self.x < self.__hero_x_2:
+                pass
+            else:
+                self.rect.x = self.x
+
+            self.y = random.randint(0,ALTO_VENTANA)
+            if self.y > self.__hero_y_1 and self.y < self.__hero_y_2:
+                pass
+            else:
+                self.rect.y = self.y
+            self.__spawn_moment = pygame.time.get_ticks()//1000
+
+    def recharge_traps(self):
+        momento = pygame.time.get_ticks()//1000
+        if not self.spawn_trap:
+            if momento - self.__spawn_moment >= 5:
+                print("spawm")
+                return True
+        return False

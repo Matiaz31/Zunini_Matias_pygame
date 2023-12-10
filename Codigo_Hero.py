@@ -2,6 +2,7 @@ import pygame
 from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
 from Codigo_Bullet import Bala,Flecha
 from Codigo_Auxi import SurfaceManager as sf
+from Codigo_Button import Button
 
 class Hero(pygame.sprite.Sprite):
     def __init__(self,frame_rate, diccionario, fosa_rect):
@@ -10,10 +11,12 @@ class Hero(pygame.sprite.Sprite):
         self.__sprites_config = self.__player_config.get("sprites")
 
         self.vida = self.__player_config["vida"]
-        self.nivel = 1
-        self.daño_bala = 100* self.nivel
-        self.daño_flecha = 7* self.nivel
+
+        self.daño_bala = 100
+        self.daño_flecha = 7
         self.puntaje = 0
+        self.exp = 0
+        self.nivel = 1
 
         self.__iddle_l = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1, flip=True)
         self.__iddle_r = sf.get_surface_from_spritesheet(self.__sprites_config["idle"], 3, 1)
@@ -27,8 +30,7 @@ class Hero(pygame.sprite.Sprite):
 
         self.__move_x = 0
         self.__move_y = 0
-        self.__speed_walk = self.__player_config["velocidad"]
-        self.__speed_walk += self.nivel
+        self.speed_walk = self.__player_config["velocidad"]
         self.__frame_rate = frame_rate
 
         self.__player_move_time = 0
@@ -50,11 +52,7 @@ class Hero(pygame.sprite.Sprite):
         self.__flecha_moment = 1
         self.__fire_flecha = False
 
-        self.__dash_moment = 1
-        self.__dash_cooldawn = 2
-        self.__dash = True
-        self.__dash_power = 15
-        self.__dash_direccion = "Right"
+        self.fosa_rect = fosa_rect
 
         self.__sprite_bullet_group = pygame.sprite.Group()
         self.__sprite_flecha_group = pygame.sprite.Group()
@@ -84,25 +82,25 @@ class Hero(pygame.sprite.Sprite):
         match direction:
             case "Right":
                 look_right = True
-                self.__set_x_animations_preset(self.__speed_walk, self.__walk_r, look_right)
+                self.__set_x_animations_preset(self.speed_walk, self.__walk_r, look_right)
 
             case "Left":
                 look_right = False
-                self.__set_x_animations_preset(-self.__speed_walk, self.__walk_l, look_right)
+                self.__set_x_animations_preset(-self.speed_walk, self.__walk_l, look_right)
 
             case "Up":
                 look_right = self.__is_looking_right
                 if look_right:
-                    self.__set_y_animations_preset(self.__speed_walk, self.__walk_r)
+                    self.__set_y_animations_preset(self.speed_walk, self.__walk_r)
                 else:
-                    self.__set_y_animations_preset(self.__speed_walk, self.__walk_l)
+                    self.__set_y_animations_preset(self.speed_walk, self.__walk_l)
 
             case "Down":
                 look_right = self.__is_looking_right
                 if look_right:
-                    self.__set_y_animations_preset(-self.__speed_walk, self.__walk_r)
+                    self.__set_y_animations_preset(-self.speed_walk, self.__walk_r)
                 else:
-                    self.__set_y_animations_preset(-self.__speed_walk, self.__walk_l)
+                    self.__set_y_animations_preset(-self.speed_walk, self.__walk_l)
         self.__is_stay = True
 
     
@@ -180,7 +178,6 @@ class Hero(pygame.sprite.Sprite):
             self.__bullet_moment = pygame.time.get_ticks()/1000
             for i in range(1,5):
                 self.__sprite_bullet_group.add(self.bala_create(i))
-            self.__fire_bullet = False
 
         if self.shoot_recharge_flecha():
             self.__flecha_moment = pygame.time.get_ticks()/1000
@@ -188,6 +185,7 @@ class Hero(pygame.sprite.Sprite):
                 self.__sprite_flecha_group.add(self.flecha_create("Right"))
             else:
                 self.__sprite_flecha_group.add(self.flecha_create("Left"))
+            self.__fire_bullet = False
 
     def shoot_recharge_bala(self):
         momento = pygame.time.get_ticks()/1000
@@ -219,7 +217,20 @@ class Hero(pygame.sprite.Sprite):
         else:
             return Flecha(self.rect.centerx,self.rect.centery,  self.__flecha_img_l, direccion)
 
-
+    def level_up(self):
+        if self.nivel < 4:
+            if self.exp >= 100:
+                self.exp = 0
+            return True
+        elif self.nivel < 7:
+            if self.exp >= 150:
+                self.exp = 0
+            return True
+        elif self.nivel > 6:
+            if self.exp >= 200:
+                self.exp = 0
+            return True
+        return False
 
     
     # def dash(self):

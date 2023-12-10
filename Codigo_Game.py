@@ -20,6 +20,7 @@ class Game:
         self.tiempo_transcurrido = 0
         self.opciones = False
         self.menu = False
+        self.playing = False
 
 
     def main_menu(self):
@@ -127,6 +128,9 @@ class Game:
                     if RANKING.checkForInput(OPTIONS_MOUSE_POS):
                         self.rankings()
                         self.opciones = False
+                    if DIFICULTY_1.checkForInput(OPTIONS_MOUSE_POS):
+                        self.dificultad = "dificultad_1"
+                        print("cambios updateados")
                     if DIFICULTY_2.checkForInput(OPTIONS_MOUSE_POS):
                         self.dificultad = "dificultad_2"
                         print("cambios updateados")
@@ -136,13 +140,19 @@ class Game:
 
             pygame.display.update()
     
-    def play(self):  
-        if not self.opciones:
+    def play(self):
+        if not self.playing:
             self.iniciar_juego()
+        self.playing = True
+
         self.game.cargar_nuevas_configs(self.dificultad)
         play_music(self.volumen,0, "Renders\Arabesque.mp3")
+
         playing = True
         while playing:
+            delta_ms = clock.tick(60)
+            pantalla.blit(self.game.fondo, (0,0))
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -155,29 +165,24 @@ class Game:
                 self.you_lost()
                 playing = False
             
-            delta_ms = clock.tick(60)
-            pantalla.blit(self.game.fondo, (0,0))
-            self.tiempo_transcurrido = self.game.get_tiempo()
+            self.tiempo_transcurrido = pygame.time.get_ticks()//1000
             pantalla.blit(get_font(40).render(f"Tiempo: {self.tiempo_transcurrido}",True, "Black"), (10,10))
+
             vida = self.game.player_sprite.vida
             cord = 10
             for _ in range(vida//100):
                 pantalla.blit(pygame.image.load("Renders\heart.png"),(cord, 40))
                 cord += 20
-
+            
+            pygame.draw.line(pantalla, (0,0,0), (10,80), (100,80), 5)
+            exp = self.game.player_sprite.exp
+            pygame.draw.line(pantalla, "Blue", (10,80), (exp,80), 5)
+            if self.game.player_sprite.level_up():
+                self.upgrade()
 
             self.game.run(delta_ms)
+            self.dificultades()
             pygame.display.update()
-            if self.dificultad == "dificultad_1":
-                if self.tiempo_transcurrido > 19 and self.tiempo_transcurrido < 120:
-                    self.dificultad = "dificultad_2"
-                    print(self.dificultad)
-            else:
-                self.game.cargar_nuevas_configs(self.dificultad)
-                if self.tiempo_transcurrido > 119:
-                    self.dificultad = "dificultad_3"
-                    self.game.cargar_nuevas_configs(self.dificultad)
-                    print(self.dificultad)
 
     def you_lost(self):
         if self.game.perdiste==True:
@@ -214,7 +219,8 @@ class Game:
                 pygame.display.update()
 
     def rankings(self):
-        while True:
+        rank = True
+        while rank:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
             pantalla.fill((0,0,0))
 
@@ -237,10 +243,13 @@ class Game:
                     sys.exit()
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     if MEIN_MENU_BUTTON.checkForInput(OPTIONS_MOUSE_POS):
+                        rank = False
                         self.main_menu()
                     if RETURN.checkForInput(OPTIONS_MOUSE_POS):
+                        rank = False
                         self.play()
                     if PLAY_AGAIN.checkForInput(OPTIONS_MOUSE_POS):
+                        rank = False
                         self.iniciar_juego()
                         self.play()
             try:
@@ -251,5 +260,54 @@ class Game:
 
             pygame.display.update()
 
+    def upgrade(self):
+        upgrading = True
+        decimo = ANCHO_VENTANA/10
+        while upgrading:
+            OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+            UPGRADE_1 = Button(image=pygame.image.load("Renders\carta.png"), pos=(decimo*2, ALTO_VENTANA/2), 
+                            text_input="+ velocidad", font=get_font(45), base_color="White", hovering_color=(20,30,0))
+            
+            UPGRADE_2 = Button(image=pygame.image.load("Renders\carta.png"), pos=(decimo*5, ALTO_VENTANA/2), 
+                                text_input="+ vida", font=get_font(45), base_color="White", hovering_color=(20,30,0))
+            
+            UPGRADE_3 = Button(image=pygame.image.load("Renders\carta.png"), pos=(decimo*7, ALTO_VENTANA/2), 
+                                text_input="+ daño", font=get_font(45), base_color="White", hovering_color=(20,30,0))
+            
+            for button in [UPGRADE_1,UPGRADE_2,UPGRADE_3]:
+                    button.changeColor(OPTIONS_MOUSE_POS)
+                    button.update(pantalla)
+
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if evento.type == pygame.MOUSEBUTTONDOWN:
+                    if UPGRADE_1.checkForInput(OPTIONS_MOUSE_POS):
+                        self.game.player_sprite.speed_walk += 0.5
+                        self.play()
+                    if UPGRADE_2.checkForInput(OPTIONS_MOUSE_POS):
+                        self.game.player_sprite.vida += 100
+                        self.play()
+                    if UPGRADE_3.checkForInput(OPTIONS_MOUSE_POS):
+                        self.game.player_sprite.daño_bala += 50
+                        self.game.player_sprite.daño_flecha += 2
+                        self.play()
+
+            pygame.display.update()
+
     def iniciar_juego(self):
         self.game = Stage(pantalla, ANCHO_VENTANA, ALTO_VENTANA, self.dificultad)
+    
+    def dificultades(self):
+        if self.dificultad == "dificultad_1":
+            if self.tiempo_transcurrido > 59 and self.tiempo_transcurrido < 120:
+                self.dificultad = "dificultad_2"
+                print(self.dificultad)
+        else:
+            self.game.cargar_nuevas_configs(self.dificultad)
+            if self.tiempo_transcurrido > 119 and self.tiempo_transcurrido < 200:
+                self.dificultad = "dificultad_4"
+                self.game.cargar_nuevas_configs(self.dificultad)
+                print(self.dificultad)

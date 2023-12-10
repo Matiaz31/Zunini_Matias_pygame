@@ -9,7 +9,7 @@ from Codigo_Auxi import (open_configs, play_music)
 class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
         self.__configs = open_configs()
-        self.fosa = Agujero(self.__configs, 130, 200)
+        self.fosa = Agujero(self.__configs)
         self.player_sprite = Hero(50,self.__configs, self.fosa.get_rect())
         self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
@@ -31,6 +31,8 @@ class Stage:
         self.perdiste = False
         self.__tiempo = 0
         self.trampas = pygame.sprite.Group()
+        self.__spawn_trampas = True
+        self.__spawn_trampas_moment = 1
 
         self.__all_enemies = []
         self.__all_trampas = []
@@ -45,8 +47,6 @@ class Stage:
         self.trampas.update(self.__main_screen)
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
-        #self.player_sprite.draw(self.__main_screen)
-        #self.__configs.update()
 
     def cargar_nuevas_configs(self, dificultad):
         self.dificultad = dificultad
@@ -56,9 +56,6 @@ class Stage:
         self.__enemis_config = self.__dificulty_config.get("enemigos")
         self.__max_enemies = self.__enemis_config["cantidad_e"]
         self.__max_trampas = self.__enemis_config["cantidad_t"]
-
-    def get_tiempo(self):
-        return pygame.time.get_ticks()//1000
 
     def spawnear_enemigos(self, cantidad):
         for _ in range(cantidad):
@@ -70,9 +67,9 @@ class Stage:
 
     def spawnear_trampas(self, cantidad_trampas):
         for _ in range(cantidad_trampas):
-            trampa = Trampa(self.player_sprite.rect, self.__mapa_config)
+            spawn_moment = pygame.time.get_ticks()//1000
+            trampa = Trampa(self.player_sprite.rect, self.__mapa_config, spawn_moment)
             self.__all_trampas.append(trampa)
-            self.trampas.add(trampa)
 
     def create_enemigos(self, cantidad):
         for _ in range(cantidad):
@@ -86,10 +83,10 @@ class Stage:
 
     def create_trampas(self, cantidad_trampas):
         for _ in range(cantidad_trampas):
-            trampa = Trampa(self.player_sprite.rect, self.__mapa_config)
+            spawn_moment = pygame.time.get_ticks()//1000
+            trampa = Trampa(self.player_sprite.rect, self.__mapa_config, spawn_moment)
             self.trampas.add(trampa)
-
-
+            trampa.spawn_trap = False
 
     def check_colide(self):
         if pygame.sprite.spritecollideany(self.player_sprite, self.enemies):
@@ -104,6 +101,7 @@ class Stage:
             if pygame.sprite.collide_rect(fruta, self.player_sprite):
                 fruta.kill()
                 self.player_sprite.puntaje += 10
+                self.player_sprite.exp += 10
 
         for cora in self.coras:
             if pygame.sprite.collide_rect(cora, self.player_sprite):
@@ -119,31 +117,28 @@ class Stage:
                 self.chek_hero_life(200)
 
         
+        cantidad_antes = len(self.enemies)
         for bullet in self.player_sprite.get_bullets:
-            cantidad_antes = len(self.enemies)
             for enemi in self.enemies:
                 if pygame.sprite.collide_rect(bullet, enemi):
                     bullet.kill()
                     enemi.vida -= self.player_sprite.daño_bala
                     self.check_enemi_death()
-            cantidad_despues = len(self.enemies)
             
         for flecha in self.player_sprite.get_flechas:
-            cantidad_antes = len(self.enemies)
             for enemi in self.enemies:
                 if pygame.sprite.collide_rect(flecha, enemi):
                     enemi.vida -= self.player_sprite.daño_flecha
                     self.check_enemi_death()
-            cantidad_despues = len(self.enemies)
+
+        cantidad_despues = len(self.enemies)
 
 
-            if cantidad_antes > cantidad_despues:
-                cantidad_vencido = cantidad_antes - cantidad_despues
-                self.player_sprite.puntaje += cantidad_vencido * 50
-                print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
-            # if len(self.enemies) == 0 and not self.__player_win:
-            #     self.__player_win = True
-            #     print(f'Ganaste la partida con: {self.player_sprite.__puntaje} Puntos!')
+        if cantidad_antes > cantidad_despues:
+            cantidad_vencido = cantidad_antes - cantidad_despues
+            self.player_sprite.puntaje += cantidad_vencido * 50
+            print(f'Puntaje actual: {self.player_sprite.puntaje} Puntos')
+
 
         if len(self.enemies) < len(self.__all_enemies):
             cantidad_e = len(self.__all_enemies) - len(self.enemies)
