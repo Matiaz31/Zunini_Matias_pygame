@@ -1,4 +1,4 @@
-import pygame,random
+import pygame
 import sys
 from Codigo_Button import Button
 from Codigo_Stage import Stage
@@ -273,75 +273,31 @@ class Game:
         while upgrading:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
+            UPGRADE_1 = Button(image=pygame.image.load("Renders/velocidad.png"), pos=(decimo*2, ALTO_VENTANA/2), 
+                            text_input="", font=get_font(45), base_color="White", hovering_color=(20,30,0))
             
-            upgrade_type_1 = random.choice["daño", "cooldawn", "score"]
-            upgrade_type_2 = random.choice["cooldawn", "velocidad", "score"]
-            upgrade_type_3 = random.choice["velocidad", "vida", "score"]
+            UPGRADE_2 = Button(image=pygame.image.load("Renders/vida.png"), pos=(decimo*5, ALTO_VENTANA/2), 
+                                text_input="", font=get_font(45), base_color="White", hovering_color=(20,30,0))
             
-            lista_upgrades = []
-                
-            carta_1 = (decimo*2, ALTO_VENTANA/2)
-            carta_2 = (decimo*5, ALTO_VENTANA/2)
-            carta_3 = (decimo*8, ALTO_VENTANA/2)
-
-            match upgrade_type_1:
-                case "daño":
-                    UPGRADE_daño = Button(image=pygame.image.load("Renders/espada.png"), pos=(carta_1), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_daño)
-                case "cooldawn":
-                    UPGRADE_cooldawn = Button(image=pygame.image.load("Renders/ojo.png"), pos=(carta_1), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_cooldawn)
-                case "score":
-                    UPGRADE_score = Button(image=pygame.image.load("Renders/emerald.png"), pos=(carta_1), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_score)
+            UPGRADE_3 = Button(image=pygame.image.load("Renders/espada.png"), pos=(decimo*8, ALTO_VENTANA/2), 
+                                text_input="", font=get_font(45), base_color="White", hovering_color=(20,30,0))
             
-            match upgrade_type_2:
-                case "cooldawn":
-                    UPGRADE_cooldawn = Button(image=pygame.image.load("Renders/ojo.png"), pos=(carta_2), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_cooldawn)
-                case "velocidad":
-                    UPGRADE_velocidad = Button(image=pygame.image.load("Renders/velocidad.png"), pos=(carta_2), 
-                            text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_velocidad)
-                case "score":
-                    UPGRADE_score = Button(image=pygame.image.load("Renders/emerald.png"), pos=(carta_2), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_score)
-                    
-            match upgrade_type_3:
-                case "velocidad":
-                    UPGRADE_velocidad = Button(image=pygame.image.load("Renders/velocidad.png"), pos=(carta_3), 
-                            text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_velocidad)
-                case "vida":
-                    UPGRADE_vida = Button(image=pygame.image.load("Renders/vida.png"), pos=(carta_3), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_vida)
-                case "score":
-                    UPGRADE_score = Button(image=pygame.image.load("Renders/emerald.png"), pos=(carta_3), 
-                                text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
-                    lista_upgrades.append(UPGRADE_score)
-            
-            for button in lista_upgrades:
-                button.changeColor(OPTIONS_MOUSE_POS)
-                button.update(pantalla)
+            for button in [UPGRADE_1,UPGRADE_2,UPGRADE_3]:
+                    button.changeColor(OPTIONS_MOUSE_POS)
+                    button.update(pantalla)
 
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if evento.type == pygame.MOUSEBUTTONDOWN:
-                    if upgrade_type_1.checkForInput(OPTIONS_MOUSE_POS):
+                    if UPGRADE_1.checkForInput(OPTIONS_MOUSE_POS):
                         self.game.player_sprite.speed_walk += 0.5
                         self.play()
-                    if upgrade_type_2.checkForInput(OPTIONS_MOUSE_POS):
+                    if UPGRADE_2.checkForInput(OPTIONS_MOUSE_POS):
                         self.game.player_sprite.vida += 100
                         self.play()
-                    if upgrade_type_3.checkForInput(OPTIONS_MOUSE_POS):
+                    if UPGRADE_3.checkForInput(OPTIONS_MOUSE_POS):
                         self.game.player_sprite.daño_bala += 50
                         self.game.player_sprite.daño_flecha += 2
                         self.play()
@@ -367,3 +323,90 @@ class Game:
                 self.game.cargar_nuevas_configs(self.dificultad)
                 print(self.dificultad)
                 
+
+
+    # def upgrade(self):
+    #     upgrading = True
+    #     decimo = ANCHO_VENTANA/10
+    #     while upgrading:
+    #         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+    #         lista_upgrades = []
+                
+    #         carta_1 = (decimo*2, ALTO_VENTANA/2)
+    #         carta_2 = (decimo*5, ALTO_VENTANA/2)
+    #         carta_3 = (decimo*8, ALTO_VENTANA/2)
+            
+    #         upgrade_type_1 = ""
+    #         upgrade_type_2 = ""
+    #         upgrade_type_3 = ""
+            
+    #         if upgrade_type_1 == "":
+    #             upgrade_type_1 = random.choice(["daño", "cooldawn", "score"])
+    #         match upgrade_type_1:
+    #             case "daño":
+    #                 UPGRADE_daño = Button(image=pygame.image.load("Renders/espada.png"), pos=(carta_1), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_daño)
+    #             case "cooldawn":
+    #                 UPGRADE_cooldawn = Button(image=pygame.image.load("Renders/ojo.png"), pos=(carta_1), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_cooldawn)
+    #             case "score":
+    #                 UPGRADE_score = Button(image=pygame.image.load("Renders/emerald.png"), pos=(carta_1), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_score)
+
+    #         if upgrade_type_2 == "":
+    #             upgrade_type_2 = random.choice(["cooldawn", "velocidad", "score"])
+    #         match upgrade_type_2:
+    #             case "cooldawn":
+    #                 UPGRADE_cooldawn = Button(image=pygame.image.load("Renders/ojo.png"), pos=(carta_2), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_cooldawn)
+    #             case "velocidad":
+    #                 UPGRADE_velocidad = Button(image=pygame.image.load("Renders/velocidad.png"), pos=(carta_2), 
+    #                         text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_velocidad)
+    #             case "score":
+    #                 UPGRADE_score = Button(image=pygame.image.load("Renders/emerald.png"), pos=(carta_2), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_score)
+
+    #         if upgrade_type_3 == "":        
+    #             upgrade_type_3 = random.choice(["velocidad", "vida", "score"])
+    #         match upgrade_type_3:
+    #             case "velocidad":
+    #                 UPGRADE_velocidad = Button(image=pygame.image.load("Renders/velocidad.png"), pos=(carta_3), 
+    #                         text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_velocidad)
+    #             case "vida":
+    #                 UPGRADE_vida = Button(image=pygame.image.load("Renders/vida.png"), pos=(carta_3), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_vida)
+    #             case "score":
+    #                 UPGRADE_score = Button(image=pygame.image.load("Renders/emerald.png"), pos=(carta_3), 
+    #                             text_input="", font=get_font(45), base_color="Black", hovering_color=(20,30,0))
+    #                 lista_upgrades.append(UPGRADE_score)
+            
+
+    #         for evento in pygame.event.get():
+    #             if evento.type == pygame.QUIT:
+    #                 pygame.quit()
+    #                 sys.exit()
+    #             for button in lista_upgrades:
+    #                 button.changeColor(OPTIONS_MOUSE_POS)
+    #                 button.update(pantalla)
+    #                 if evento.type == pygame.MOUSEBUTTONDOWN:
+    #                     if button.checkForInput(OPTIONS_MOUSE_POS):
+    #                         self.game.player_sprite.speed_walk += 0.5
+    #                         self.play()
+    #                     if button.checkForInput(OPTIONS_MOUSE_POS):
+    #                         self.game.player_sprite.vida += 100
+    #                         self.play()
+    #                     if button.checkForInput(OPTIONS_MOUSE_POS):
+    #                         self.game.player_sprite.daño_bala += 50
+    #                         self.game.player_sprite.daño_flecha += 2
+    #                         self.play()
+
+    #         pygame.display.update()
