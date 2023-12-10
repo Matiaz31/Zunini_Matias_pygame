@@ -10,7 +10,7 @@ class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
         self.__configs = open_configs()
         self.fosa = Agujero(self.__configs)
-        self.player_sprite = Hero(50,self.__configs, self.fosa.get_rect())
+        self.player_sprite = Hero(50,self.__configs)
         self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
         self.dificultad = dificultad
@@ -43,8 +43,8 @@ class Stage:
         self.check_colide()
         self.fosa.update(self.__main_screen)
         self.frutas.update(self.__main_screen)
-        self.coras.update(self.__main_screen)
         self.trampas.update(self.__main_screen)
+        self.coras.update(self.__main_screen)
         self.enemies.update(delta_ms, self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
 
@@ -91,7 +91,7 @@ class Stage:
     def check_colide(self):
         if pygame.sprite.spritecollideany(self.player_sprite, self.enemies):
             self.__is_hitting = True
-            self.chek_hero_life(100)
+            #self.chek_hero_life(100)
             self.inmortal()
         else:
             self.__is_hitting = False
@@ -130,9 +130,22 @@ class Stage:
                 if pygame.sprite.collide_rect(flecha, enemi):
                     enemi.vida -= self.player_sprite.daño_flecha
                     self.check_enemi_death()
-
         cantidad_despues = len(self.enemies)
 
+
+        if self.fosa.get_rect().colliderect(self.player_sprite.rect_arr_collition):
+            self.player_sprite.rect.top = self.fosa.get_rect().bottom + 5
+        
+        if self.fosa.get_rect().colliderect(self.player_sprite.rect_abj_collition):
+            self.player_sprite.rect.bottom = self.fosa.get_rect().top - 5
+        
+        if self.fosa.get_rect().colliderect(self.player_sprite.rect_der_collition):
+            self.player_sprite.rect.right = self.fosa.get_rect().left - 5
+        
+        if self.fosa.get_rect().colliderect(self.player_sprite.rect_izq_collition):
+            self.player_sprite.rect.left = self.fosa.get_rect().right + 5
+        
+        
 
         if cantidad_antes > cantidad_despues:
             cantidad_vencido = cantidad_antes - cantidad_despues

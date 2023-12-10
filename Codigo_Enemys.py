@@ -191,9 +191,9 @@ class Fantasma(pygame.sprite.Sprite):
         else:
             self.rect.x = self.x
 
-        self.y = random.randint(10,ALTO_VENTANA)
+        self.y = random.randint(400,ALTO_VENTANA)
         if self.y > self.__hero_rect.centery - 100 and self.y < self.__hero_rect.centery + 100:
-            self.y = random.randint(0,ALTO_VENTANA)
+            self.y = random.randint(400,ALTO_VENTANA)
         else:
             self.rect.y = self.y
 

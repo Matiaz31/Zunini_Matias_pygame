@@ -1,11 +1,10 @@
 import pygame
-from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
+from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA, DEBUG)
 from Codigo_Bullet import Bala,Flecha
 from Codigo_Auxi import SurfaceManager as sf
-from Codigo_Button import Button
 
 class Hero(pygame.sprite.Sprite):
-    def __init__(self,frame_rate, diccionario, fosa_rect):
+    def __init__(self,frame_rate, diccionario):
         super().__init__()
         self.__player_config = diccionario.get("estadisticas_hero")
         self.__sprites_config = self.__player_config.get("sprites")
@@ -43,6 +42,12 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.__actual_img_animation.get_rect()
         self.rect.x = ANCHO_VENTANA/2
         self.rect.y = ALTO_VENTANA/2
+        self.is_coliding = False
+
+        self.rect_arr_collition = pygame.Rect(self.rect.x + 12, self.rect.y, self.rect.width -30 ,2)
+        self.rect_der_collition = pygame.Rect(self.rect.right, self.rect.y - 20, 2,self.rect.height - 30)
+        self.rect_abj_collition = pygame.Rect(self.rect.x + 20, self.rect.bottom, self.rect.width - 30,2)
+        self.rect_izq_collition = pygame.Rect(self.rect.x, self.rect.y - 20, 2,self.rect.height - 30)
         
         self.__bala_cooldawn = self.__player_config["cooldawn_bala"]
         self.__flecha_cooldawn = self.__player_config["cooldawn_flecha"]
@@ -52,11 +57,9 @@ class Hero(pygame.sprite.Sprite):
         self.__flecha_moment = 1
         self.__fire_flecha = False
 
-        self.fosa_rect = fosa_rect
-
         self.__sprite_bullet_group = pygame.sprite.Group()
         self.__sprite_flecha_group = pygame.sprite.Group()
-    
+
     @property
     def get_bullets(self) -> list[Bala]:
         return self.__sprite_bullet_group
@@ -103,8 +106,14 @@ class Hero(pygame.sprite.Sprite):
                     self.__set_y_animations_preset(-self.speed_walk, self.__walk_l)
         self.__is_stay = True
 
-    
     def stay(self):
+        print(self.rect)
+        print(self.rect.x)
+        print(self.rect.y)
+        print(f"arr {self.rect_arr_collition}")
+        print(f"abj {self.rect_abj_collition}")
+        print(f"der {self.rect_der_collition}")
+        print(f"izq {self.rect_izq_collition}")
         if self.__is_stay:
             if self.__actual_animation != self.__iddle_l and self.__actual_animation != self.__iddle_r:
                 self.__actual_animation = self.__iddle_r if self.__is_looking_right else self.__iddle_l
@@ -158,6 +167,7 @@ class Hero(pygame.sprite.Sprite):
                 self.__initial_frame = 0
     
     def update(self, delta_ms, screen: pygame.surface.Surface):
+        self.boxes()
         self.stay()
         self.teclas()
         self.shoot(screen)
@@ -170,6 +180,11 @@ class Hero(pygame.sprite.Sprite):
         self.draw(screen)
     
     def draw(self, screen: pygame.surface.Surface):
+        if DEBUG:
+            pygame.draw.rect(screen, "red", self.rect_abj_collition)
+            pygame.draw.rect(screen, "red", self.rect_arr_collition)
+            pygame.draw.rect(screen, "red", self.rect_der_collition)
+            pygame.draw.rect(screen, "red", self.rect_izq_collition)
         self.__actual_img_animation = self.__actual_animation[self.__initial_frame]
         screen.blit(self.__actual_img_animation, self.rect)
 
@@ -235,6 +250,11 @@ class Hero(pygame.sprite.Sprite):
                 return True
         return False
 
+    def boxes(self):
+        self.rect_arr_collition = pygame.Rect(self.rect.x + 12, self.rect.y, self.rect.width -30 ,2)
+        self.rect_der_collition = pygame.Rect(self.rect.right, self.rect.y + 20, 2,self.rect.height - 30)
+        self.rect_abj_collition = pygame.Rect(self.rect.x + 20, self.rect.bottom, self.rect.width - 30,2)
+        self.rect_izq_collition = pygame.Rect(self.rect.x, self.rect.y + 20, 2,self.rect.height - 30)
     
     # def dash(self):
     #     if self.dash_recharge():
