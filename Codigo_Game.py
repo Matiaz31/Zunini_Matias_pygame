@@ -28,8 +28,6 @@ class Game:
         self.menu = False
         self.playing = False
 
-
-
     def main_menu(self):
         play_music(self.volumen, 0, "Renders\menu_chill.wav")
         self.menu = True
@@ -168,16 +166,10 @@ class Game:
             if self.game.perdiste == True:
                 self.you_lost()
                 playing = False
-            
-            contador = 0
-            momento_1 = pygame.time.get_ticks()//1000
-            momento_2 = pygame.time.get_ticks()//1000 + 1
-            if momento_2 != momento_1:
-                contador += 1
 
 
-            self.tiempo_transcurrido = pygame.time.get_ticks()//1000
-            pantalla.blit(get_font(40).render(f"Tiempo: {contador}",True, "Black"), (10,10))
+            tiempo_transcurrido = pygame.time.get_ticks()//1000
+            pantalla.blit(get_font(40).render(f"Tiempo: {tiempo_transcurrido}",True, "Black"), (10,10))
             pantalla.blit(get_font(40).render(f"Score: {self.game.player_sprite.puntaje}",True, "Black"), (160,10))
 
             vida = self.game.player_sprite.vida
@@ -186,8 +178,15 @@ class Game:
                 pantalla.blit(pygame.image.load("Renders\heart.png"),(cord, 40))
                 cord += 20
             
-            pygame.draw.line(pantalla, (0,0,0), (10,80), (100,80), 5)
             exp = self.game.player_sprite.exp
+            exp_max = 0
+            if self.game.player_sprite.nivel < 3:
+                pygame.draw.line(pantalla, (0,0,0), (10,80), (100,80), 5)
+            elif self.game.player_sprite.nivel < 6:
+                pygame.draw.line(pantalla, (0,0,0), (10,80), (150,80), 5)
+            elif self.game.player_sprite.nivel > 6:
+                pygame.draw.line(pantalla, (0,0,0), (10,80), (200,80), 5)
+
             pygame.draw.line(pantalla, "Blue", (10,80), (exp,80), 5)
             if self.game.player_sprite.level_up():
                 self.upgrade()

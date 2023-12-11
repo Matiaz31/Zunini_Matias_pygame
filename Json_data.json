@@ -154,7 +154,7 @@
             "flecha_l": "Renders/flecha_l.png"
         } ,
         "vida": 500,
-        "velocidad": 7,
+        "velocidad": 7.5,
         "cooldawn_bala": 2.5,
         "cooldawn_flecha": 3.5
     },

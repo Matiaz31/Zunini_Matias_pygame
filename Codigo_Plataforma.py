@@ -8,8 +8,8 @@ class Agujero():
         self.__fosa = pygame.transform.scale(pygame.image.load(self.__configs["fosa"]),(140,150))
         self.__fosa_rect = self.__fosa.get_rect()
 
-        self.__fosa_rect.x = random.randint(120, 400)
-        self.__fosa_rect.y = random.randint(80, 500)
+        self.__fosa_rect.x = random.randint(120, 500)
+        self.__fosa_rect.y = random.randint(150, 450)
 
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.__fosa, self.__fosa_rect)

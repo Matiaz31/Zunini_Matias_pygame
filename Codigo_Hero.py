@@ -236,8 +236,8 @@ class Hero(pygame.sprite.Sprite):
                 self.nivel += 1
                 self.exp = 0
                 return True
-        elif self.nivel > 6:
-            if self.exp >= 150:
+        elif self.nivel > 5:
+            if self.exp >= 200:
                 self.nivel += 1
                 self.exp = 0
                 return True

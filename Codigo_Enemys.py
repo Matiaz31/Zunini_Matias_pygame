@@ -94,13 +94,13 @@ class Zambie(pygame.sprite.Sprite):
         rango_y = self.__hero_rect.centery - self.rect.centery
         if self.__is_looking_right:
             rango_x = self.__hero_rect.centerx - self.rect.centerx
-            if rango_x <= 40 and rango_y <= 55 and rango_y >= -50:
+            if rango_x <= 40 and rango_y <= 65 and rango_y >= -60:
                 self.__set_x_animations_preset(0, self.__atack_r,look_right)
                 self.__is_atacking = True
               
         else:
             rango_x = self.__hero_rect.centerx - self.rect.centerx
-            if rango_x >= -40 and rango_y <= 55 and rango_y >= -50: 
+            if rango_x >= -40 and rango_y <= 65 and rango_y >= -60: 
                 self.__set_x_animations_preset(0, self.__atack_l,look_right)
                 self.__is_atacking = True
              
@@ -185,17 +185,14 @@ class Fantasma(pygame.sprite.Sprite):
         self.__hero_rect = hero_rect
 
         self.rect = self.__actual_img_animation.get_rect()
-        self.x = random.randint(10,ANCHO_VENTANA)
-        if self.x > self.__hero_rect.centerx - 100 and self.x < self.__hero_rect.centerx + 100:
-            self.x = random.randint(0,ANCHO_VENTANA)
-        else:
-            self.rect.x = self.x
 
-        self.y = random.randint(400,ALTO_VENTANA)
-        if self.y > self.__hero_rect.centery - 100 and self.y < self.__hero_rect.centery + 100:
-            self.y = random.randint(400,ALTO_VENTANA)
-        else:
-            self.rect.y = self.y
+        self.x = random.randint(10,ANCHO_VENTANA)
+
+        self.rect.x = self.x
+
+        self.y = random.randint(200,600)
+        
+        self.rect.y = self.y
 
         self.sprite_group = pygame.sprite.Group()
         self.vida = self.__config["vida"]
@@ -307,15 +304,15 @@ class Trampa(pygame.sprite.Sprite):
 
     def recolocar_trampas(self):
         if self.recharge_traps():
-            self.x = random.randint(0,ANCHO_VENTANA)
+            self.x = random.randint(200,ANCHO_VENTANA-200)
             if self.x > self.__hero_x_1 and self.x < self.__hero_x_2:
-                pass
+                self.x = random.randint(200,ANCHO_VENTANA-200)
             else:
                 self.rect.x = self.x
 
-            self.y = random.randint(0,ALTO_VENTANA)
+            self.y = random.randint(150,ALTO_VENTANA-150)
             if self.y > self.__hero_y_1 and self.y < self.__hero_y_2:
-                pass
+                self.y = random.randint(150,ALTO_VENTANA-150)
             else:
                 self.rect.y = self.y
             self.__spawn_moment = pygame.time.get_ticks()//1000

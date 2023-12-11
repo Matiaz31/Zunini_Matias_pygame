@@ -4,12 +4,16 @@ from Codigo_Hero import Hero
 from Codigo_Enemys import Zambie,Fantasma,Trampa
 from Codigo_Fruta import Fruta
 from Codigo_Plataforma import Agujero
+from Codigo_Portales import Portales
 from Codigo_Auxi import (open_configs)
+from Codigo_Assets import ANCHO_VENTANA, ALTO_VENTANA
 
 class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
         self.__configs = open_configs()
         self.fosa = Agujero(self.__configs)
+        self.portal_1 = Portales(self.__configs,30, ALTO_VENTANA -150)
+        self.portal_2 = Portales(self.__configs, ANCHO_VENTANA-150, 30)
         self.player_sprite = Hero(50,self.__configs)
         self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
@@ -46,13 +50,15 @@ class Stage:
         self.trampas.update(self.__main_screen)
         self.coras.update(self.__main_screen)
         self.enemies.update(delta_ms, self.__main_screen)
+        self.portal_1.update(self.__main_screen)
+        self.portal_2.update(self.__main_screen)
         self.player_sprite.update(delta_ms, self.__main_screen)
 
     def cargar_nuevas_configs(self, dificultad):
-        self.dificultad = dificultad
         self.__configs = open_configs()
-        self.__mapa_config = self.__configs.get("config_mundo")
+        self.dificultad = dificultad
         self.__dificulty_config = self.__configs.get(self.dificultad)
+        self.__mapa_config = self.__configs.get("config_mundo")
         self.__enemis_config = self.__dificulty_config.get("enemigos")
         self.__max_enemies = self.__enemis_config["cantidad_e"]
         self.__max_trampas = self.__enemis_config["cantidad_t"]
@@ -144,8 +150,15 @@ class Stage:
         
         if self.fosa.get_rect().colliderect(self.player_sprite.rect_izq_collition):
             self.player_sprite.rect.left = self.fosa.get_rect().right + 5
-        
-        
+
+        self.portal_1.colision(self.player_sprite.rect,1)
+        if self.portal_1.on == False:
+            self.portal_2.on = False
+            self.portal_2.portal_moment = self.portal_1.portal_moment
+        self.portal_2.colision(self.player_sprite.rect,2)
+        if self.portal_2.on == False:
+            self.portal_1.on = False
+            self.portal_1.portal_moment = self.portal_2.portal_moment
 
         if cantidad_antes > cantidad_despues:
             cantidad_vencido = cantidad_antes - cantidad_despues
@@ -186,5 +199,3 @@ class Stage:
                 else:
                     self.coras.add(Fruta(self.__configs,pos_x,pos_y, "heart"))
                 enemi.kill()
-
-    
