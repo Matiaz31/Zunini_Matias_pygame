@@ -107,13 +107,6 @@ class Hero(pygame.sprite.Sprite):
         self.__is_stay = True
 
     def stay(self):
-        print(self.rect)
-        print(self.rect.x)
-        print(self.rect.y)
-        print(f"arr {self.rect_arr_collition}")
-        print(f"abj {self.rect_abj_collition}")
-        print(f"der {self.rect_der_collition}")
-        print(f"izq {self.rect_izq_collition}")
         if self.__is_stay:
             if self.__actual_animation != self.__iddle_l and self.__actual_animation != self.__iddle_r:
                 self.__actual_animation = self.__iddle_r if self.__is_looking_right else self.__iddle_l

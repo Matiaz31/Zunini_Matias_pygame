@@ -137,13 +137,10 @@ class Game:
                         self.opciones = False
                     if DIFICULTY_1.checkForInput(OPTIONS_MOUSE_POS):
                         self.dificultad = "dificultad_1"
-                        print("cambios updateados")
                     if DIFICULTY_2.checkForInput(OPTIONS_MOUSE_POS):
                         self.dificultad = "dificultad_2"
-                        print("cambios updateados")
                     if DIFICULTY_3.checkForInput(OPTIONS_MOUSE_POS):
                         self.dificultad = "dificultad_3"
-                        print("cambios updateados")
 
             pygame.display.update()
     
@@ -458,17 +455,14 @@ class Game:
         if self.dificultad == "dificultad_1":
             if self.tiempo_transcurrido > 59 and self.tiempo_transcurrido < 120:
                 self.dificultad = "dificultad_2"
-                print(self.dificultad)
         else:
             self.game.cargar_nuevas_configs(self.dificultad)
             if self.tiempo_transcurrido > 119 and self.tiempo_transcurrido < 201:
                 self.dificultad = "dificultad_3"
                 self.game.cargar_nuevas_configs(self.dificultad)
-                print(self.dificultad)
             if self.tiempo_transcurrido > 200:
                 self.dificultad = "dificultad_4"
                 self.game.cargar_nuevas_configs(self.dificultad)
-                print(self.dificultad)
                 
     def sql(self):
         with sql.connect(db_path) as db:
@@ -491,18 +485,14 @@ class Game:
     def sql_blit(self):
         with sql.connect(db_path) as db:
             cursor = db.cursor()
-        cursor.execute("SELECT Nombres, Scores FROM Score ORDER BY Scores")
-        lista_ordenada =[]
-        lista_desordenada =[]
-        for fila in cursor:
-            lista_desordenada.append(fila)
-        lista_ordenada = quicksort_mayor(lista_desordenada)
+            lista = cursor.execute("SELECT Nombres, Scores FROM Score ORDER BY Scores DESC")
+        
         y = 80
-        for fila in lista_ordenada:
-            print(lista_ordenada)
+        for fila in lista:
             str_tabulado = f"NOMBRE: {fila[0]}, Score: {fila[1]}"
             if y < 400:
-                pantalla.blit(get_font(50).render(f"NOMBRE: {fila[0]}, Score: {fila[1]}",True, "White"), (ANCHO_VENTANA/3,y))
+                mensaje = f"NOMBRE: {fila[0]},\t Score: {fila[1]}"
+                pantalla.blit(get_font(50).render(mensaje, True, "White"), (ANCHO_VENTANA/3,y))
             y += 50
 
 

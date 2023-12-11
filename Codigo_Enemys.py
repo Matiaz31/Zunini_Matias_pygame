@@ -324,6 +324,5 @@ class Trampa(pygame.sprite.Sprite):
         momento = pygame.time.get_ticks()//1000
         if not self.spawn_trap:
             if momento - self.__spawn_moment >= 5:
-                print("spawm")
                 return True
         return False

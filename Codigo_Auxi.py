@@ -41,15 +41,3 @@ def play_music(suma,volumen, que):
     pygame.mixer.music.load(que)
     pygame.mixer.music.set_volume(volumen)
     pygame.mixer.music.play()
-
-def quicksort_mayor(array):
-    '''
-    Recibe un array para iterar
-    itera ordenando de menor a mayor'''
-    if len(array) <= 1:
-        return array
-    else:
-        pivot = array[0]
-        menor = [x for x in array[1:] if x < pivot]
-        mayor = [x for x in array[1:] if x >= pivot]
-    return quicksort_mayor(mayor) + [pivot] + quicksort_mayor(menor)
