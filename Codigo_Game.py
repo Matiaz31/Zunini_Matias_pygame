@@ -170,7 +170,7 @@ class Game:
 
             tiempo_transcurrido = pygame.time.get_ticks()//1000
             pantalla.blit(get_font(40).render(f"Tiempo: {tiempo_transcurrido}",True, "Black"), (10,10))
-            pantalla.blit(get_font(40).render(f"Score: {self.game.player_sprite.puntaje}",True, "Black"), (160,10))
+            pantalla.blit(get_font(40).render(f"Score: {self.game.player_sprite.puntaje}",True, "Black"), (180,10))
 
             vida = self.game.player_sprite.vida
             cord = 10
@@ -443,8 +443,6 @@ class Game:
                         self.game.player_sprite.daño_bala += 50
                         self.game.player_sprite.daño_flecha += 2
                         self.play()
-
-           
 
             pygame.display.update()
 
