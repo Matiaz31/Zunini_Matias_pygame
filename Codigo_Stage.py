@@ -91,7 +91,7 @@ class Stage:
     def check_colide(self):
         if pygame.sprite.spritecollideany(self.player_sprite, self.enemies):
             self.__is_hitting = True
-            #self.chek_hero_life(100)
+            self.chek_hero_life(100)
             self.inmortal()
         else:
             self.__is_hitting = False
