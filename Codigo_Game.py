@@ -455,13 +455,16 @@ class Game:
         if self.dificultad == "dificultad_1":
             if self.tiempo_transcurrido > 59 and self.tiempo_transcurrido < 120:
                 self.dificultad = "dificultad_2"
+                print("dificultad aumentada")
         else:
             self.game.cargar_nuevas_configs(self.dificultad)
             if self.tiempo_transcurrido > 119 and self.tiempo_transcurrido < 201:
                 self.dificultad = "dificultad_3"
+                print("dificultad aumentada")
                 self.game.cargar_nuevas_configs(self.dificultad)
             if self.tiempo_transcurrido > 200:
                 self.dificultad = "dificultad_4"
+                print("dificultad aumentada")
                 self.game.cargar_nuevas_configs(self.dificultad)
                 
     def sql(self):
