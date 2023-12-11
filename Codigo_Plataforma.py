@@ -2,9 +2,8 @@ import pygame, random
 from Codigo_Assets import (ALTO_VENTANA, ANCHO_VENTANA)
 from Codigo_Auxi import (open_configs)
 
-class Agujero(pygame.sprite.Sprite):
+class Agujero():
     def __init__(self, diccionario):
-        super().__init__()
         self.__configs = open_configs().get("config_mundo")
         self.__fosa = pygame.transform.scale(pygame.image.load(self.__configs["fosa"]),(140,150))
         self.__fosa_rect = self.__fosa.get_rect()

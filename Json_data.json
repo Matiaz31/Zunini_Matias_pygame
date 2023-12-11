@@ -164,7 +164,9 @@
         "fosa": "Renders/fosa_L.png",
         "gema": "Renders/gema.png",
         "heart": "Renders/heart.png",
-        "trampa": "Renders/trampa.png"
+        "trampa": "Renders/trampa.png",
+        "portal_on": "Renders/portal_on.png",
+        "portal_off": "Renders/portal_off.png"
     }
 }
 

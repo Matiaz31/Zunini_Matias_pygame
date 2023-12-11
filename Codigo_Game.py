@@ -4,7 +4,7 @@ import sqlite3 as sql
 from Codigo_Button import Button
 from Codigo_Stage import Stage
 from Codigo_Assets import ANCHO_VENTANA, ALTO_VENTANA
-from Codigo_Auxi import get_font, play_music, quicksort_mayor
+from Codigo_Auxi import get_font, play_music
 import os.path
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -203,6 +203,7 @@ class Game:
                 OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
                 Texto = get_font(150).render("Game Over",True, "Black")
                 pantalla.blit(Texto,(260,170))
+                pantalla.blit(get_font(100).render(f"Score: {self.game.player_sprite.puntaje}",True, "Black"), (360,50))
 
                 MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
                                 text_input="Menu", font=get_font(80), base_color="Black", hovering_color=(20,120,0))
