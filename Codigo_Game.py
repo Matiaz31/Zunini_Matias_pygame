@@ -4,7 +4,12 @@ import sqlite3 as sql
 from Codigo_Button import Button
 from Codigo_Stage import Stage
 from Codigo_Assets import ANCHO_VENTANA, ALTO_VENTANA
-from Codigo_Auxi import get_font, play_music
+from Codigo_Auxi import get_font, play_music, quicksort_mayor
+import os.path
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "Base_de_datos.db")
+
 
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 clock = pygame.time.Clock()
@@ -22,7 +27,7 @@ class Game:
         self.opciones = False
         self.menu = False
         self.playing = False
-        self.nombre = ""
+
 
 
     def main_menu(self):
@@ -176,6 +181,7 @@ class Game:
 
             self.tiempo_transcurrido = pygame.time.get_ticks()//1000
             pantalla.blit(get_font(40).render(f"Tiempo: {contador}",True, "Black"), (10,10))
+            pantalla.blit(get_font(40).render(f"Score: {self.game.player_sprite.puntaje}",True, "Black"), (160,10))
 
             vida = self.game.player_sprite.vida
             cord = 10
@@ -363,26 +369,21 @@ class Game:
                         lista_teclas.append("M")
                     
             self.nombre = "".join(lista_teclas)
-            print(self.nombre)
             pantalla.blit(get_font(40).render(f"Nombre: {self.nombre}",True, "White"), (600,230))
             pygame.display.update()
 
     def rankings(self):
         rank = True
-        scores = {}
-        nombre_max = ""
-        puntaje_max = 0
-        nombre_2 = ""
-        puntaje_2 = 0
+        self.sql()
         while rank:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
             pantalla.fill((0,0,0))
 
-            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 400), 
+            MEIN_MENU_BUTTON = Button(image=None, pos=(ANCHO_VENTANA/2, 500), 
                             text_input="Menu", font=get_font(75), base_color="White", hovering_color=(20,120,0))
-            RETURN = Button(image=None, pos=(ANCHO_VENTANA/2, 460), 
+            RETURN = Button(image=None, pos=(ANCHO_VENTANA/2, 560), 
                                 text_input="Return", font=get_font(75), base_color="White", hovering_color=(20,120,0))
-            PLAY_AGAIN = Button(image=None, pos=(ANCHO_VENTANA/2, 520), 
+            PLAY_AGAIN = Button(image=None, pos=(ANCHO_VENTANA/2, 620), 
                                 text_input="Play Again", font=get_font(75), base_color="White", hovering_color=(20,120,0))
             
             for button in [MEIN_MENU_BUTTON,RETURN,PLAY_AGAIN]:
@@ -404,45 +405,10 @@ class Game:
                         rank = False
                         self.iniciar_juego()
                         self.play()
-            try:
-                Texto = get_font(80).render(f"Score: {self.game.player_sprite.puntaje}",True, "White")
-                pantalla.blit(Texto,(380,170))
-            except Exception:
-                pass
-
-            conect = sql.connect("Base_de_datos.db")
-            cursor = conect.cursor()
-            cursor.execute(
-            """CREATE TABLE IF NOT EXISTS Score (   
-            Nombres text
-            Scores text
-            )
-            """)
-            conect.commit()
-
-            instruccion_Nombres = f"INSERT INTO Nombres VALUES ('{self.nombre}')"
-            cursor.execute(instruccion_Nombres)
-            instruccion_score = f"INSERT INTO Scores VALUES ('{self.game.player_sprite.puntaje}')"
-            cursor.execute(instruccion_score)
-            conect.commit()
-
-            cursor.execute("SELECT ID, Nombres, Scores, FROM Score")
-            score_max = 0
-            for fila in cursor:
-                if score_max == 0 or score_max < fila[2]:
-                    diccionario = {fila[1]:fila[2]}
-                    scores.update(diccionario)
 
 
-            
-            #     new_dict = {fila[1]: fila[2]}
-            #     scores.update(new_dict)
-            # for score in scores.items():
-            #     instruccion_Iniciales = f"INSERT INTO Iniciales VALUES ('{score[0]}')"
-            #     cursor.execute(instruccion_Iniciales)
-            #     instruccion_score = f"INSERT INTO Scores VALUES ('{score[1]}')"
-            #     cursor.execute(instruccion_score)
-            #     conect.commit()
+            self.sql_blit()
+
 
             pygame.display.update()
 
@@ -504,6 +470,41 @@ class Game:
                 self.game.cargar_nuevas_configs(self.dificultad)
                 print(self.dificultad)
                 
+    def sql(self):
+        with sql.connect(db_path) as db:
+            cursor = db.cursor()
+            
+            cursor.execute(
+            """CREATE TABLE IF NOT EXISTS Score (   
+            Nombres text,
+            Scores text
+            )
+            """)
+            db.commit()
+            try:
+                instruccion = f"INSERT INTO Score VALUES ('{self.nombre}', '{self.game.player_sprite.puntaje}')"
+                cursor.execute(instruccion)
+                db.commit()
+            except Exception:
+                pass
+
+    def sql_blit(self):
+        with sql.connect(db_path) as db:
+            cursor = db.cursor()
+        cursor.execute("SELECT Nombres, Scores FROM Score ORDER BY Scores")
+        lista_ordenada =[]
+        lista_desordenada =[]
+        for fila in cursor:
+            lista_desordenada.append(fila)
+        lista_ordenada = quicksort_mayor(lista_desordenada)
+        y = 80
+        for fila in lista_ordenada:
+            print(lista_ordenada)
+            str_tabulado = f"NOMBRE: {fila[0]}, Score: {fila[1]}"
+            if y < 400:
+                pantalla.blit(get_font(50).render(f"NOMBRE: {fila[0]}, Score: {fila[1]}",True, "White"), (ANCHO_VENTANA/3,y))
+            y += 50
+
 
 
     # def upgrade(self):

@@ -1,7 +1,7 @@
 import pygame
 import math
 import json
-
+from Codigo_Button import Button
 class SurfaceManager:
     @staticmethod
     def get_surface_from_spritesheet(img_path: str, cols: int, rows: int, step = 1, flip: bool = False) -> list[pygame.surface.Surface]:
@@ -36,8 +36,20 @@ def open_configs() -> dict:
     with open("Json_data.json", "r", encoding="utf-8") as config:
         return json.load(config)
     
-def play_music(self, volumen, que):
-    volumen += 0
+def play_music(suma,volumen, que):
+    volumen += suma
     pygame.mixer.music.load(que)
     pygame.mixer.music.set_volume(volumen)
     pygame.mixer.music.play()
+
+def quicksort_mayor(array):
+    '''
+    Recibe un array para iterar
+    itera ordenando de menor a mayor'''
+    if len(array) <= 1:
+        return array
+    else:
+        pivot = array[0]
+        menor = [x for x in array[1:] if x < pivot]
+        mayor = [x for x in array[1:] if x >= pivot]
+    return quicksort_mayor(mayor) + [pivot] + quicksort_mayor(menor)

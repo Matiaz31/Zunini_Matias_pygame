@@ -4,7 +4,7 @@ from Codigo_Hero import Hero
 from Codigo_Enemys import Zambie,Fantasma,Trampa
 from Codigo_Fruta import Fruta
 from Codigo_Plataforma import Agujero
-from Codigo_Auxi import (open_configs, play_music)
+from Codigo_Auxi import (open_configs)
 
 class Stage:
     def __init__(self, screen: pygame.surface.Surface, limit_w, limit_h, dificultad: str):
@@ -107,7 +107,7 @@ class Stage:
             if pygame.sprite.collide_rect(cora, self.player_sprite):
                 cora.kill()
                 if self.player_sprite.vida == 500:
-                    self.player_sprite.puntaje += 140
+                    self.player_sprite.puntaje += 40
                 else:
                     self.player_sprite.vida += 100
 
@@ -177,7 +177,7 @@ class Stage:
     def check_enemi_death(self):
         for enemi in self.enemies:     
             if enemi.vida <= 0:
-                self.player_sprite.puntaje += 130
+                self.player_sprite.puntaje += 10
                 pos_x = enemi.rect.x
                 pos_y = enemi.rect.y
                 rand = random.randint(1,23)
